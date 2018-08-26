@@ -9,7 +9,7 @@
 	<description>Projekat iz predmeta XML i Web Servisi</description>
 
 	<parent>
-		<groupId>rs.ac.uns.ftn.XML</groupId>
+		<groupId>rs.ac.uns.ftn.sbz</groupId>
 		<artifactId>projekat</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
@@ -63,7 +63,7 @@
 			<scope>test</scope>
 		</dependency>
 		 <dependency>
-            <groupId>rs.ac.uns.ftn.XML</groupId>
+            <groupId>rs.ac.uns.ftn.sbz</groupId>
             <artifactId>frontend</artifactId>
             <version>${project.version}</version>
             <scope>runtime</scope>
@@ -82,6 +82,10 @@
                 <directory>target/frontend</directory>
                 <targetPath>static</targetPath>
             </resource>
+			<resource>
+			<directory>src/main/resources</directory>
+			<targetPath>static</targetPath>
+		</resource>
         </resources>
 	</build>
 

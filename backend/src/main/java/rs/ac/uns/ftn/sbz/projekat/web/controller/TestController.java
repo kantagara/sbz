@@ -1,4 +1,4 @@
-package rs.ac.uns.ftn.XML.projekat.web.controller;
+package rs.ac.uns.ftn.sbz.projekat.web.controller;
 
 import java.awt.*;
 import java.util.concurrent.atomic.AtomicLong;

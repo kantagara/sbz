@@ -9,7 +9,7 @@
     <description>The ng2boot frontend project</description>
 	
 	<parent>
-			<groupId>rs.ac.uns.ftn.XML</groupId>
+			<groupId>rs.ac.uns.ftn.sbz</groupId>
 			<artifactId>projekat</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 	</parent>

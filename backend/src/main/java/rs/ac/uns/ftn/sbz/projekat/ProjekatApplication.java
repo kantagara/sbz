@@ -1,4 +1,4 @@
-package rs.ac.uns.ftn.XML.projekat;
+package rs.ac.uns.ftn.sbz.projekat;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
