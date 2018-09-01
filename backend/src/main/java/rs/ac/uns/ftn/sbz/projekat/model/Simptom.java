@@ -11,6 +11,27 @@ public class Simptom {
     private Long id;
 
     @Column
-    private String nazivSimptoma;
+    private String naziv;
 
+    public Simptom(String naziv) {
+        this.naziv = naziv;
+    }
+
+    public Simptom() {}
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getNaziv() {
+        return naziv;
+    }
+
+    public void setNaziv(String naziv) {
+        this.naziv = naziv;
+    }
 }

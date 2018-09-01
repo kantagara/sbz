@@ -1,0 +1,90 @@
+package backend.rules
+
+import rs.ac.uns.ftn.bsep.Bezbednost.model.entity.Log
+import rs.ac.uns.ftn.bsep.Bezbednost.model.entity.LogCounter
+import rs.ac.uns.ftn.bsep.Bezbednost.model.entity.Alarm
+import java.util.Date
+import rs.ac.uns.ftn.bsep.Bezbednost.service.AlarmService;
+import org.slf4j.Logger;
+import rs.ac.uns.ftn.bsep.Bezbednost.configuration.DateUtil;
+
+rule "Delete log which doesn't corespond to any rule"
+    agenda-group "ukljucen"
+    salience -2000
+    when
+    $l: Log()
+    not LogCounter(logs contains $l)
+    then
+    System.out.println("OBRISAO LOG" + $l.getMessage());
+    delete($l);
+    end
+
+rule "Delete log counter which was saved"
+    agenda-group "ukljucen"
+    salience -1000
+    when
+    $lc: LogCounter(saved == true)
+    then
+    System.out.println("Brisem log counter " + $lc.toString());
+    delete($lc);
+    end
+
+
+rule "Invalid login when not first time"
+    agenda-group "ukljucen"
+    salience 1
+    lock-on-active
+    when
+        $l: Log(message contains "invalid login", type contains "", ipAddress contains "")
+        $logCounter: LogCounter(message contains  $l.message, type contains "", ipAddress contains "", saved == false)
+    then
+        $logCounter.setCount($logCounter.getCount() + 1);
+        $logCounter.getLogs().add($l);
+        System.out.println("inkrementirao log counter" + $l.getMessage());
+        update($logCounter);
+end
+
+
+rule "Invalid login when first time"
+    agenda-group "ukljucen"
+    salience 2
+    lock-on-active
+    when
+        $l: Log(message contains "invalid login", type contains "", ipAddress contains "")
+        not LogCounter() or not (LogCounter(message contains $l.message, type contains "", ipAddress contains "" ))
+    then
+        LogCounter logCounter = new LogCounter($l.getIpAddress(), 1, $l.getMessage(), $l.getType(), false);
+        logCounter.getLogs().add($l);
+        System.out.println("Napravio log counter" + $l.getMessage());
+        insert(logCounter);
+end
+
+
+rule "Create alarm for Invalid login when it occurs more than 5 times"
+    agenda-group "ukljucen"
+    salience -1
+    no-loop
+    when
+        $lc: LogCounter(count >= 5, saved == false, message contains "invalid login", type contains "", ipAddress contains "")
+        $alarmS : AlarmService()
+    then
+    System.out.println(DateUtil.addDays($lc.getLogs().get($lc.getLogs().size() - 5).getDate(), 0, 4, 0).getTime() + " "
+            + $lc.getLogs().get($lc.getLogs().size() - 1).getDate());
+        if(DateUtil.addDays($lc.getLogs().get($lc.getLogs().size() - 5).getDate(), 0, 4, 0).getTime() >=
+            $lc.getLogs().get($lc.getLogs().size() - 1).getDate().getTime()){
+            Alarm alarm = new Alarm();
+            alarm.setDateOccured(new Date());
+            alarm.setSource($lc.getIpAddress());
+            alarm.setMessage("Invalid login");
+            alarm.setSeverity("MEDIUM");
+            $alarmS.save(alarm);
+
+            $lc.setSaved(true);
+            update($lc);
+        }
+
+end
+
+
+
+

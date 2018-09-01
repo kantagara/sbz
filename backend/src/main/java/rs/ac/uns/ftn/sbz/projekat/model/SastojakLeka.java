@@ -1,6 +1,8 @@
 package rs.ac.uns.ftn.sbz.projekat.model;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "SASTOJAK_LEKA")
@@ -10,9 +12,14 @@ public class SastojakLeka {
     @GeneratedValue(strategy = GenerationType.TABLE)
     private Long id;
 
+    @Column
     private String naziv;
 
+    @ManyToMany
+    private List<Pacijent> pacijentiAlergicniNa;
+
     public SastojakLeka() {
+        this.pacijentiAlergicniNa = new ArrayList<>();
     }
 
     public Long getId() {
@@ -29,5 +36,13 @@ public class SastojakLeka {
 
     public void setNaziv(String naziv) {
         this.naziv = naziv;
+    }
+
+    public List<Pacijent> getPacijentiAlergicniNa() {
+        return pacijentiAlergicniNa;
+    }
+
+    public void setPacijentiAlergicniNa(List<Pacijent> pacijentiAlergicniNa) {
+        this.pacijentiAlergicniNa = pacijentiAlergicniNa;
     }
 }

@@ -11,6 +11,8 @@ public class Bolest
     @GeneratedValue(strategy = GenerationType.TABLE)
     private Long id;
 
+    @Column
+    private String naziv;
 
     @ManyToMany
     private List<Simptom> opstiSimptomi;
@@ -18,13 +20,13 @@ public class Bolest
     @ManyToMany
     private List<Simptom> specificniSimptomi;
 
-    public Bolest(List<Simptom> opstiSimptomi, List<Simptom> specificniSimptomi) {
+    public Bolest(String naziv, List<Simptom> opstiSimptomi, List<Simptom> specificniSimptomi) {
+        this.naziv = naziv;
         this.opstiSimptomi = opstiSimptomi;
         this.specificniSimptomi = specificniSimptomi;
     }
 
-    public Bolest() {
-    }
+    public Bolest(){}
 
     public Long getId() {
         return id;
@@ -50,5 +52,11 @@ public class Bolest
         this.specificniSimptomi = specificniSimptomi;
     }
 
+    public String getNaziv() {
+        return naziv;
+    }
 
+    public void setNaziv(String naziv) {
+        this.naziv = naziv;
+    }
 }

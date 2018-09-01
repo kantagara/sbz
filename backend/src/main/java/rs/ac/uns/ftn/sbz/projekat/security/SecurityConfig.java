@@ -1,4 +1,4 @@
-package rs.ac.uns.ftn.sbz.projekat;
+package rs.ac.uns.ftn.sbz.projekat.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

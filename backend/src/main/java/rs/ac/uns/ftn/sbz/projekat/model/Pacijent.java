@@ -18,12 +18,18 @@ public class Pacijent {
     @Column
     private String prezime;
 
+    @Column
+    private String jmbg;
+
     @ManyToMany
-    private List<SastojakLeka> alergicanNa;
+    private List<SastojakLeka> alergicanNaSastojak;
+
+    @ManyToMany
+    private List<Lek> alergicanNaLek;
 
 
     public Pacijent() {
-        alergicanNa = new ArrayList<>();
+        alergicanNaSastojak = new ArrayList<>();
     }
 
     public Long getId() {
@@ -50,11 +56,27 @@ public class Pacijent {
         this.prezime = prezime;
     }
 
-    public List<SastojakLeka> getAlergicanNa() {
-        return alergicanNa;
+    public List<SastojakLeka> getAlergicanNaSastojak() {
+        return alergicanNaSastojak;
     }
 
-    public void setAlergicanNa(List<SastojakLeka> alergicanNa) {
-        this.alergicanNa = alergicanNa;
+    public void setAlergicanNaSastojak(List<SastojakLeka> alergicanNaSastojak) {
+        this.alergicanNaSastojak = alergicanNaSastojak;
+    }
+
+    public List<Lek> getAlergicanNaLek() {
+        return alergicanNaLek;
+    }
+
+    public void setAlergicanNaLek(List<Lek> alergicanNaLek) {
+        this.alergicanNaLek = alergicanNaLek;
+    }
+
+    public String getJmbg() {
+        return jmbg;
+    }
+
+    public void setJmbg(String jmbg) {
+        this.jmbg = jmbg;
     }
 }
