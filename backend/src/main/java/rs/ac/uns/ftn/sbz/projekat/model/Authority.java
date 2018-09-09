@@ -13,15 +13,15 @@ public class Authority {
     private Long id;
 
     @Column(nullable = false)
-    private String ime;
+    private String name;
 
     @OneToMany(mappedBy = "authority", fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
     private List<AccountAuthority> accountAuthorities;
 
     public Authority() { this.accountAuthorities = new ArrayList<>(); }
 
-    public Authority(String ime) {
-        this.ime = ime;
+    public Authority(String name) {
+        this.name = name;
         this.accountAuthorities = new ArrayList<>();
     }
 
@@ -29,12 +29,12 @@ public class Authority {
 
     public void setId(Long id) { this.id = id; }
 
-    public String getIme() {
-        return ime;
+    public String getName() {
+        return name;
     }
 
-    public void setIme(String ime) {
-        this.ime = ime;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public List<AccountAuthority> getAccountAuthorities() { return accountAuthorities; }

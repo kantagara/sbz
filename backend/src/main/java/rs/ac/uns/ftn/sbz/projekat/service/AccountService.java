@@ -2,6 +2,7 @@ package rs.ac.uns.ftn.sbz.projekat.service;
 
 
 import rs.ac.uns.ftn.sbz.projekat.model.Account;
+import rs.ac.uns.ftn.sbz.projekat.web.DTOs.AccountDTO;
 
 import java.util.List;
 
@@ -20,4 +21,11 @@ public interface AccountService {
     void remove(Account account);
 
 
+    void registerUser(AccountDTO accountDTO, String s);
+
+    void changeAccount(AccountDTO accountDTO);
+
+    List<Account> findByRole(String role);
+
+    boolean delete(String username);
 }

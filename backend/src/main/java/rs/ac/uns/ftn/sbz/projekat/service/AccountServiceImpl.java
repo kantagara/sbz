@@ -1,11 +1,20 @@
 package rs.ac.uns.ftn.sbz.projekat.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import rs.ac.uns.ftn.sbz.projekat.model.Account;
+import rs.ac.uns.ftn.sbz.projekat.model.AccountAuthority;
+import rs.ac.uns.ftn.sbz.projekat.model.Authority;
+import rs.ac.uns.ftn.sbz.projekat.repository.AccountAuthorityRepository;
 import rs.ac.uns.ftn.sbz.projekat.repository.AccountRepository;
+import rs.ac.uns.ftn.sbz.projekat.repository.AuthorityRepository;
 import rs.ac.uns.ftn.sbz.projekat.security.JWTUtils;
+import rs.ac.uns.ftn.sbz.projekat.web.DTOs.AccountDTO;
 
 import java.util.List;
 
@@ -16,23 +25,26 @@ public class AccountServiceImpl implements AccountService{
     private AccountRepository accountRepository;
 
     @Autowired
+    private AuthorityRepository authorityRepository;
+
+    @Autowired
+    private AccountAuthorityRepository accountAuthorityRepository;
+
+    @Autowired
     private JWTUtils jwtUtils;
 
     @Override
-    @Transactional(readOnly = true)
     public boolean usernameExists(String username) {
         Account account = this.accountRepository.findByUsername(username);
-        return account == null;
+        return account != null;
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<Account> findAll() {
         return this.accountRepository.findAll();
     }
 
     @Override
-    @Transactional(readOnly = true)
     public Account findOne(Long id) {
         return this.accountRepository.getOne(id);
     }
@@ -52,6 +64,46 @@ public class AccountServiceImpl implements AccountService{
         this.accountRepository.delete(account.getId());
     }
 
+    @Override
+    public void registerUser(AccountDTO accountDTO, String role) {
+        Account account = new Account(accountDTO.getUsername(),
+                BCrypt.hashpw(accountDTO.getPassword(), BCrypt.gensalt()),
+                accountDTO.getIme(), accountDTO.getPrezime());
+
+        Authority authority = authorityRepository.findByName(role);
+        AccountAuthority accountAuthority = new AccountAuthority(account, authority);
+
+        accountRepository.save(account);
+        accountAuthorityRepository.save(accountAuthority);
+    }
+
+    @Override
+    public void changeAccount(AccountDTO accountDTO) {
+        Account account = findByUsername(accountDTO.getUsername());
+
+        BCryptPasswordEncoder bc = new BCryptPasswordEncoder();
+        String pass = bc.encode(account.getPassword());
+        account.setIme(account.getIme());
+        account.setPrezime(account.getPrezime());
+        account.setPassword(pass);
+        save(account);
+    }
+
+    @Override
+    public List<Account> findByRole(String role) {
+        return accountRepository.findAllByRole(role);
+    }
+
+    @Override
+    public boolean delete(String username) {
+        Account account = findByUsername(username);
+        if(account == null)
+           return false;
+
+        remove(account);
+
+        return true;
+    }
 
 
 }
