@@ -26,7 +26,7 @@ public class DiseaseServiceImpl implements DiseaseService {
 
     @Override
     public Disease save(Disease disease) {
-        return null;
+        return this.diseaseRepository.save(disease);
     }
 
     @Override
@@ -60,10 +60,10 @@ public class DiseaseServiceImpl implements DiseaseService {
             List<SymptomDTO> specific = new ArrayList<>();
 
             for(Symptom symptom: disease.getGeneralSymptoms())
-                general.add(new SymptomDTO(symptom.getName()));
+                general.add(new SymptomDTO(symptom.getName(), symptom.getValue()));
 
             for(Symptom symptom: disease.getSpecificSymptoms())
-                specific.add(new SymptomDTO(symptom.getName()));
+                specific.add(new SymptomDTO(symptom.getName(), symptom.getValue()));
             dtos.add(new DiseaseDTO(disease.getName(), general, specific));
         }
 

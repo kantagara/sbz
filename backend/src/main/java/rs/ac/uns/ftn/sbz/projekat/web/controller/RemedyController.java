@@ -7,10 +7,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.ftn.sbz.projekat.model.Remedy;
 import rs.ac.uns.ftn.sbz.projekat.service.RemedyService;
-import rs.ac.uns.ftn.sbz.projekat.web.DTOs.LekDTO;
+import rs.ac.uns.ftn.sbz.projekat.web.DTOs.RemedyDTO;
 
 @RestController
-@RequestMapping(value = "/api/lek")
+@RequestMapping(value = "/api/remedy")
 public class RemedyController {
 
     @Autowired
@@ -21,10 +21,9 @@ public class RemedyController {
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity addNew(@RequestBody LekDTO lekDTO) {
+    public ResponseEntity addNew(@RequestBody RemedyDTO remedyDTO) {
 
-        return new ResponseEntity<>(lekDTO,
-                !this.remedyService.add(lekDTO) ? HttpStatus.BAD_REQUEST : HttpStatus.OK);
+        return new ResponseEntity<>(!this.remedyService.add(remedyDTO) ? HttpStatus.BAD_REQUEST : HttpStatus.OK);
     }
 
     @GetMapping(
@@ -48,9 +47,9 @@ public class RemedyController {
             value = "/",
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity delete(@RequestParam String naziv){
+    public ResponseEntity delete(@RequestParam String name){
 
-        Remedy lek = this.remedyService.findByNaziv(naziv);
+        Remedy lek = this.remedyService.findByNaziv(name);
         if(lek == null)
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
 
@@ -64,10 +63,11 @@ public class RemedyController {
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity alter(@RequestBody LekDTO lekDTO) {
-
-        this.remedyService.alter(lekDTO);
+    public ResponseEntity alter(@RequestBody RemedyDTO remedyDTO) {
+        this.remedyService.alter(remedyDTO);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+
 
 }

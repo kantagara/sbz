@@ -34,7 +34,7 @@ public class SymptomServiceImpl implements SymptomService {
         List<Symptom> symptoms = symptomRepository.findAll();
         List<SymptomDTO> dtos = new ArrayList<>();
         for(Symptom s: symptoms){
-            dtos.add(new SymptomDTO(s.getName()));
+            dtos.add(new SymptomDTO(s.getName(), s.getValue()));
         }
 
         return dtos;
@@ -63,7 +63,7 @@ public class SymptomServiceImpl implements SymptomService {
         if(exists != null)
             return false;
 
-        Symptom symptom = new Symptom(symptomDTO.getName());
+        Symptom symptom = new Symptom(symptomDTO.getName(), symptomDTO.getValue());
         save(symptom);
 
         return true;

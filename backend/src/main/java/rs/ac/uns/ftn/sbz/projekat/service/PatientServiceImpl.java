@@ -4,10 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import rs.ac.uns.ftn.sbz.projekat.model.Diagnosis;
 import rs.ac.uns.ftn.sbz.projekat.model.Ingredient;
 import rs.ac.uns.ftn.sbz.projekat.model.Patient;
 import rs.ac.uns.ftn.sbz.projekat.model.Remedy;
 import rs.ac.uns.ftn.sbz.projekat.repository.PatientRepository;
+import rs.ac.uns.ftn.sbz.projekat.web.DTOs.DiagnosisDTO;
 import rs.ac.uns.ftn.sbz.projekat.web.DTOs.PatientDTO;
 
 import java.util.ArrayList;
@@ -25,6 +27,9 @@ public class PatientServiceImpl implements PatientService {
 
     @Autowired
     private IngredientService ingredientService;
+
+    @Autowired
+    private DiagnosisService diagnosisService;
 
     @Override
     public Patient save(Patient patient) {
@@ -66,19 +71,23 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     public boolean create(PatientDTO patientDTO) {
-        Patient p = this.findByJmbg(patientDTO.getJmbg());
-        if(p != null)
+
+        if(this.findByJmbg(patientDTO.getJmbg()) != null)
             return false;
 
         Patient patient = new Patient(patientDTO.getName(), patientDTO.getSurname(), patientDTO.getJmbg(),
-                new ArrayList<>(), new ArrayList<>());
+                new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
 
         for(String remedy: patientDTO.getAllergicToRemedy()){
             patient.getAllergicToRemedy().add(this.remedyService.findByNaziv(remedy));
         }
+
         for(String ingredient: patientDTO.getAllergicToIngredient()){
             patient.getAllergicToIngredient().add(this.ingredientService.findByNaziv(ingredient));
         }
+
+        for(DiagnosisDTO diagnosisDTO : patientDTO.getDiagnosis())
+            patient.getDiagnoses().add(diagnosisService.findOne(diagnosisDTO.getId()));
 
         save(patient);
 

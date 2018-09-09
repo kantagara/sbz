@@ -11,7 +11,7 @@ import rs.ac.uns.ftn.sbz.projekat.web.DTOs.SymptomDTO;
 
 
 @RestController
-@RequestMapping(value = "/api/simptom")
+@RequestMapping(value = "/api/symptom")
 public class SymptomController {
 
     @Autowired

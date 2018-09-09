@@ -20,6 +20,9 @@ public class PatientDTO {
 
 
     public PatientDTO() {
+        allergicToRemedy = new ArrayList<>();
+        allergicToIngredient = new ArrayList<>();
+        diagnosis = new ArrayList<>();
     }
 
     public PatientDTO(String name, String surname, String jmbg) {
@@ -28,6 +31,7 @@ public class PatientDTO {
         this.jmbg = jmbg;
         allergicToIngredient = new ArrayList<>();
         allergicToRemedy = new ArrayList<>();
+        diagnosis = new ArrayList<>();
     }
 
     public PatientDTO(String name, String surname, String jmbg, List<String> allergicToRemedy, List<String> allergicToIngredient, List<DiagnosisDTO> diagnosis) {
@@ -46,6 +50,7 @@ public class PatientDTO {
 
         this.name = patient.getName();
         this.surname = patient.getSurname();
+        this.jmbg = patient.getJmbg();
 
         for(Remedy remedy: patient.getAllergicToRemedy())
             allergicToRemedy.add(remedy.getName());

@@ -2,7 +2,7 @@ package rs.ac.uns.ftn.sbz.projekat.service;
 
 
 import rs.ac.uns.ftn.sbz.projekat.model.Remedy;
-import rs.ac.uns.ftn.sbz.projekat.web.DTOs.LekDTO;
+import rs.ac.uns.ftn.sbz.projekat.web.DTOs.RemedyDTO;
 
 import java.util.List;
 
@@ -18,11 +18,11 @@ public interface RemedyService {
 
     Remedy findByNaziv(String naziv);
 
-    void alter(LekDTO lekDTO);
+    void alter(RemedyDTO remedyDTO);
 
-    boolean add(LekDTO lekDTO);
+    boolean add(RemedyDTO remedyDTO);
 
-    List<LekDTO> getAll();
+    List<RemedyDTO> getAll();
 
     List<String> getAllIngridients();
 }

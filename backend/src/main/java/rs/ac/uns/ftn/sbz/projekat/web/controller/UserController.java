@@ -64,7 +64,7 @@ public class UserController {
     }
 
     @PostMapping(value = "/register", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity registerAdmin(@RequestBody AccountDTO accountDTO, @RequestParam boolean isAdmin){
+    public ResponseEntity register(@RequestBody AccountDTO accountDTO, @RequestParam boolean isAdmin){
 
         if(this.accountService.usernameExists(accountDTO.getUsername())){
             return new ResponseEntity<>(HttpStatus.CONFLICT);

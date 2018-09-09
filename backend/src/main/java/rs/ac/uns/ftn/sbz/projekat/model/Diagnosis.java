@@ -1,6 +1,9 @@
 package rs.ac.uns.ftn.sbz.projekat.model;
 
+import rs.ac.uns.ftn.sbz.projekat.web.DTOs.DiagnosisDTO;
+
 import javax.persistence.*;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -41,6 +44,7 @@ public class Diagnosis {
         this.symptoms = symptoms;
         this.therapy = terapija;
     }
+
 
     public Long getId() {
         return id;

@@ -43,6 +43,15 @@ public class Patient {
         this.allergicToRemedy = allergicToRemedy;
     }
 
+    public Patient(String name, String surname, String jmbg, List<Ingredient> allergicToIngredient, List<Remedy> allergicToRemedy, List<Diagnosis> diagnoses) {
+        this.name = name;
+        this.surname = surname;
+        this.jmbg = jmbg;
+        this.allergicToIngredient = allergicToIngredient;
+        this.allergicToRemedy = allergicToRemedy;
+        this.diagnoses = diagnoses;
+    }
+
     public Long getId() {
         return id;
     }

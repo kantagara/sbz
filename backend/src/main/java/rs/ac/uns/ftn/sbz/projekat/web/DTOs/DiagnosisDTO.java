@@ -12,6 +12,7 @@ public class DiagnosisDTO {
     private String date;
     private String jmbg;
     private List<SymptomDTO> symtpoms;
+    private List<RemedyDTO> remedy;
     private Long id;
 
 
@@ -29,11 +30,12 @@ public class DiagnosisDTO {
 
     public DiagnosisDTO(Diagnosis diagnosis){
         symtpoms = new ArrayList<>();
+        remedy = new ArrayList<>();
         id = diagnosis.getId();
         jmbg = diagnosis.getPatient().getJmbg();
         date = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(diagnosis.getDateCreated());
-        diagnosis.getSymptoms().forEach(s -> symtpoms.add(new SymptomDTO(s.getName())));
-
+        diagnosis.getSymptoms().forEach(s -> symtpoms.add(new SymptomDTO(s.getName(), s.getValue())));
+        diagnosis.getTherapy().forEach(t -> remedy.add(new RemedyDTO(t)));
     }
 
     public String getDisease() {
@@ -66,5 +68,13 @@ public class DiagnosisDTO {
 
     public void setJmbg(String jmbg) {
         this.jmbg = jmbg;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

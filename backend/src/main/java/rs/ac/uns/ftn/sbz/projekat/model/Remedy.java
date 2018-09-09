@@ -19,16 +19,16 @@ public class Remedy {
     private RemedyType remedyType;
 
     @ManyToMany
-    private List<Ingredient> sastojci;
+    private List<Ingredient> ingredients;
 
     public Remedy() {
-        sastojci = new ArrayList<>();
+        ingredients = new ArrayList<>();
     }
 
-    public Remedy(RemedyType remedyType, String name, List<Ingredient> sastojciLeka) {
+    public Remedy(RemedyType remedyType, String name, List<Ingredient> ingredents) {
         this.remedyType = remedyType;
         this.name = name;
-        this.sastojci = sastojciLeka;
+        this.ingredients = ingredents;
     }
 
     public Long getId() {
@@ -55,11 +55,11 @@ public class Remedy {
         this.remedyType = remedyType;
     }
 
-    public List<Ingredient> getSastojci() {
-        return sastojci;
+    public List<Ingredient> getIngredients() {
+        return ingredients;
     }
 
-    public void setSastojci(List<Ingredient> sastojci) {
-        this.sastojci = sastojci;
+    public void setIngredients(List<Ingredient> ingredients) {
+        this.ingredients = ingredients;
     }
 }

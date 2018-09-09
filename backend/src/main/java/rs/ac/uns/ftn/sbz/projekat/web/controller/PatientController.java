@@ -54,10 +54,10 @@ public class PatientController {
     }
 
     @DeleteMapping(
-            value = "/",
+            value = "/{jmbg}",
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity delete(@RequestParam String jmbg){
+    public ResponseEntity delete(@PathVariable String jmbg){
 
         Patient patient = this.patientService.findByJmbg(jmbg);
         if(patient == null)
@@ -87,4 +87,16 @@ public class PatientController {
     }
 
 
+    @GetMapping(
+            value = "/diagnosis",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity getDiagnosis(@RequestParam String id) {
+        Diagnosis diagnosis = this.diagnosisService.findOne(new Long(id));
+
+        if( diagnosis == null)
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+
+        return new ResponseEntity<>(new DiagnosisDTO(diagnosis), HttpStatus.OK);
+    }
 }

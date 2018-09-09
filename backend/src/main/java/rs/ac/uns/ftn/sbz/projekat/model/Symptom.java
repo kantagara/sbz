@@ -13,8 +13,13 @@ public class Symptom {
     @Column
     private String name;
 
-    public Symptom(String name) {
+    @Column
+    private Double value;
+
+
+    public Symptom(String name, Double value) {
         this.name = name;
+        this.value = value;
     }
 
     public Symptom() {}
@@ -33,5 +38,13 @@ public class Symptom {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Double getValue() {
+        return value;
+    }
+
+    public void setValue(Double value) {
+        this.value = value;
     }
 }
