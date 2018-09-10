@@ -18,5 +18,9 @@ public interface SymptomService {
 
     Symptom findByName(String name);
 
+    Symptom findByNameAndValue(String name, Double value);
+
+    Symptom findByNameAndValueGreaterThan(String name, Double value);
+
     boolean add(SymptomDTO symptomDTO);
 }

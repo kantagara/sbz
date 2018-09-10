@@ -1,0 +1,90 @@
+package backend.rules
+
+import rs.ac.uns.ftn.sbz.projekat.service.DiseaseService;
+import rs.ac.uns.ftn.sbz.projekat.model.Diagnosis;
+import rs.ac.uns.ftn.sbz.projekat.model.Disease;
+import rs.ac.uns.ftn.sbz.projekat.model.Patient;
+import rs.ac.uns.ftn.sbz.projekat.model.drools.DiseaseFound;
+import rs.ac.uns.ftn.sbz.projekat.model.drools.DiseaseFoundList;
+import rs.ac.uns.ftn.sbz.projekat.web.DTOs.SymptomDTO;
+
+
+import java.util.Date;
+
+rule "Prehlada"
+    agenda-group "diseases"
+    salience 10
+    lock-on-active
+    when
+        $diesaseService: DiseaseService();
+        $diagnosis: Diagnosis($symptoms : symptoms);
+        $k:Number(intValue >= 0) from accumulate (
+            SymptomDTO(name == "kasalj" || name == "kijanje" || name == "glavobolja" || name == "curenje iz nosa" || name == "bol u grlu"
+            )from $symptoms,
+            init(int count = 0;),
+            action(count += 1;),
+            result(count))
+    then
+    Disease disease = $diesaseService.findByName("prehlada");
+    DiseaseFound found = new DiseaseFound(disease, (double)$k / (double)disease.getGeneralSymptoms().size());
+    insert(found);
+    System.out.println("Prehlada" + $k);
+    end
+
+
+rule "Groznica"
+    agenda-group "diseases"
+    salience 10
+    lock-on-active
+        when
+            $diesaseService: DiseaseService();
+            $diagnosis: Diagnosis($symptoms : symptoms);
+            $k:Number(intValue >= 4) from accumulate (
+                SymptomDTO(name == "kasalj" || name == "kijanje" || name == "bol u grlu" || name == "curenje iz nosa" ||
+                                    name == "glavobolja" || name == "drhtavica" || (name == "temperatura" && value > 38)
+                )from $symptoms,
+                init(int count = 0;),
+                action(count += 1;),
+                result(count))
+        then
+        Disease disease = $diesaseService.findByName("groznica");
+        DiseaseFound found = new DiseaseFound(disease, (double)$k / (double)disease.getGeneralSymptoms().size());
+        insert(found);
+        System.out.println("Groznica" + $k);
+        end
+        
+rule "Upala krajnika"
+    agenda-group "diseases"
+        lock-on-active
+        salience 10
+        when
+            $diesaseService: DiseaseService();
+            $diagnosis: Diagnosis($symptoms : symptoms);
+            $k:Number(intValue >= 4) from accumulate (
+                SymptomDTO(name == "bol u grlu" || name == "bol koji se siri do usiju" || name == "gubitak apetita" || name == "umor" ||
+                                    name == "glavobolja" || name == "drhtavica" || name == "zuti sekret iz nosa" ||
+                                    (name == "temperatura" && value >= 40 && value <= 41 )
+                )from $symptoms,
+                init(int count = 0;),
+                action(count += 1;),
+                result(count))
+        then
+        Disease disease = $diesaseService.findByName("upala krajnika");
+        DiseaseFound found =  new DiseaseFound(disease, (double)$k / (double)disease.getGeneralSymptoms().size());
+        insert(found);
+        System.out.println("Upala krajnika" + $k);
+        end
+
+
+rule "Najverovatnija bolest"
+    no-loop
+    lock-on-active
+    salience -100
+    when
+        $disease :DiseaseFound($weight : weight)
+        and not DiseaseFound($weight < weight)
+        $list : DiseaseFoundList();
+    then
+        $list.getDiseases().add($disease);
+     end
+

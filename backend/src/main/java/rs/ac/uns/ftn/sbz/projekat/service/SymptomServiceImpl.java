@@ -56,6 +56,16 @@ public class SymptomServiceImpl implements SymptomService {
         return this.symptomRepository.findByName(naziv);
     }
 
+    @Override
+    public Symptom findByNameAndValue(String name, Double value) {
+        return this.symptomRepository.findByNameAndValue(name, value);
+    }
+
+    @Override
+    public Symptom findByNameAndValueGreaterThan(String name, Double value) {
+        return symptomRepository.findByNameAndValueGreaterThanEqual(name, value);
+    }
+
 
     @Override
     public boolean add(SymptomDTO symptomDTO) {

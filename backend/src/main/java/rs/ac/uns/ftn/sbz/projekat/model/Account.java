@@ -25,10 +25,10 @@ public class Account {
     private String password;
 
     @Column(nullable = false)
-    private String ime;
+    private String name;
 
     @Column(nullable = false)
-    private String prezime;
+    private String surname;
 
     @Column(nullable = false, columnDefinition = "INTEGER DEFAULT 0")
     @Version
@@ -44,11 +44,11 @@ public class Account {
         this.accountAuthorities = new ArrayList<>();
     }
 
-    public Account(String username, String password, String ime, String prezime) {
+    public Account(String username, String password, String name, String surname) {
         this.username = username;
         this.password = password;
-        this.ime = ime;
-        this.prezime = prezime;
+        this.name = name;
+        this.surname = surname;
         this.accountAuthorities = new ArrayList<>();
     }
 
@@ -81,19 +81,19 @@ public class Account {
         this.accountAuthorities = accountAuthorities;
     }
 
-    public String getIme() {
-        return ime;
+    public String getName() {
+        return name;
     }
 
-    public void setIme(String ime) {
-        this.ime = ime;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getPrezime() {
-        return prezime;
+    public String getSurname() {
+        return surname;
     }
 
-    public void setPrezime(String prezime) {
-        this.prezime = prezime;
+    public void setSurname(String surname) {
+        this.surname = surname;
     }
 }

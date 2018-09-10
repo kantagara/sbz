@@ -27,4 +27,12 @@ public class SymptomDTO {
     public void setValue(Double value) {
         this.value = value;
     }
+
+    @Override
+    public String toString() {
+        return "SymptomDTO{" +
+                "name='" + name + '\'' +
+                ", value=" + value +
+                '}';
+    }
 }

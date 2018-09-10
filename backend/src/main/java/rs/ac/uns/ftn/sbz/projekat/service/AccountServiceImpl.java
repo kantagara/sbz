@@ -1,12 +1,9 @@
 package rs.ac.uns.ftn.sbz.projekat.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import rs.ac.uns.ftn.sbz.projekat.model.Account;
 import rs.ac.uns.ftn.sbz.projekat.model.AccountAuthority;
 import rs.ac.uns.ftn.sbz.projekat.model.Authority;
@@ -83,8 +80,8 @@ public class AccountServiceImpl implements AccountService{
 
         BCryptPasswordEncoder bc = new BCryptPasswordEncoder();
         String pass = bc.encode(account.getPassword());
-        account.setIme(account.getIme());
-        account.setPrezime(account.getPrezime());
+        account.setName(account.getName());
+        account.setSurname(account.getSurname());
         account.setPassword(pass);
         save(account);
     }

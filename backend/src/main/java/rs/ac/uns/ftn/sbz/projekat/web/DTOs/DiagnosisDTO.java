@@ -11,30 +11,30 @@ public class DiagnosisDTO {
     private String disease;
     private String date;
     private String jmbg;
-    private List<SymptomDTO> symtpoms;
+    private List<SymptomDTO> symptoms;
     private List<RemedyDTO> remedy;
     private Long id;
 
 
     public DiagnosisDTO(){
-        symtpoms= new ArrayList<>();
+        symptoms = new ArrayList<>();
     }
 
-    public DiagnosisDTO(String disease,String jmbg, String date, List<SymptomDTO> symtpoms, Long id) {
+    public DiagnosisDTO(String disease, String jmbg, String date, List<SymptomDTO> symptoms, Long id) {
         this.disease = disease;
         this.date = date;
         this.jmbg = jmbg;
-        this.symtpoms = symtpoms;
+        this.symptoms = symptoms;
         this.id = id;
     }
 
     public DiagnosisDTO(Diagnosis diagnosis){
-        symtpoms = new ArrayList<>();
+        symptoms = new ArrayList<>();
         remedy = new ArrayList<>();
         id = diagnosis.getId();
         jmbg = diagnosis.getPatient().getJmbg();
         date = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(diagnosis.getDateCreated());
-        diagnosis.getSymptoms().forEach(s -> symtpoms.add(new SymptomDTO(s.getName(), s.getValue())));
+        diagnosis.getSymptoms().forEach(s -> symptoms.add(new SymptomDTO(s.getName(), s.getValue())));
         diagnosis.getTherapy().forEach(t -> remedy.add(new RemedyDTO(t)));
     }
 
@@ -54,12 +54,12 @@ public class DiagnosisDTO {
         this.date = date;
     }
 
-    public List<SymptomDTO> getSymtpoms() {
-        return symtpoms;
+    public List<SymptomDTO> getSymptoms() {
+        return symptoms;
     }
 
-    public void setSymtpoms(List<SymptomDTO> symtpoms) {
-        this.symtpoms = symtpoms;
+    public void setSymptoms(List<SymptomDTO> symptoms) {
+        this.symptoms = symptoms;
     }
 
     public String getJmbg() {

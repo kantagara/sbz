@@ -22,8 +22,8 @@ public class AccountDTO {
     }
 
     public AccountDTO(Account account) {
-        this.ime = account.getIme();
-        this.prezime = account.getPrezime();
+        this.ime = account.getName();
+        this.prezime = account.getSurname();
         this.username = account.getUsername();
     }
 

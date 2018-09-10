@@ -24,7 +24,7 @@ insert into symptom (id, name, value) values (105, 'kasalj', null);
 insert into symptom (id, name, value) values (106, 'temperatura', 38);
 insert into symptom (id, name, value) values (107, 'drhtavica', null);
 insert into symptom (id, name, value) values (108, 'bol koji se siri do usiju', null);
-insert into symptom (id, name, value) values (109, 'temperatura', 40, 0);
+insert into symptom (id, name, value) values (109, 'temperatura', 40);
 insert into symptom (id, name, value) values (110, 'gubitak apetita', null);
 insert into symptom (id, name, value) values (111, 'umor', null);
 insert into symptom (id, name, value) values (112, 'zuti sekret iz nosa', null);
