@@ -4,12 +4,105 @@ import rs.ac.uns.ftn.sbz.projekat.service.DiseaseService;
 import rs.ac.uns.ftn.sbz.projekat.model.Diagnosis;
 import rs.ac.uns.ftn.sbz.projekat.model.Disease;
 import rs.ac.uns.ftn.sbz.projekat.model.Patient;
+import rs.ac.uns.ftn.sbz.projekat.model.Symptom;
+import rs.ac.uns.ftn.sbz.projekat.model.Remedy;
+import rs.ac.uns.ftn.sbz.projekat.model.RemedyType;
 import rs.ac.uns.ftn.sbz.projekat.model.drools.DiseaseFound;
 import rs.ac.uns.ftn.sbz.projekat.model.drools.DiseaseFoundList;
-import rs.ac.uns.ftn.sbz.projekat.web.DTOs.SymptomDTO;
-
+import rs.ac.uns.ftn.sbz.projekat.util.DateUtil;
 
 import java.util.Date;
+
+
+rule "Hronicna bubrezna bolest"
+    agenda-group "diseases"
+    salience 10
+    lock-on-active
+    no-loop
+    when
+        $diseaseService: DiseaseService();
+        $d: Diagnosis($symptoms: symptoms)
+        Patient($dij: diagnoses)
+        $hiper: Number(intValue >= 0) from accumulate(
+            Diagnosis((disease.name == "hipertenzija")
+              && (new Date() > DateUtil.addDays(dateCreated, 0, 6, 0))
+            )from $dij,
+            init(int count = 0;),
+            action(count = 1;),
+            result(count)
+        )
+        $dijabetes: Number(intValue >= 0) from accumulate(
+            Diagnosis(disease.name == "dijabetes"
+            )from $dij,
+            init(int count = 0;),
+            action(count = 1;),
+            result(count)
+        )
+        $opste:Number((intValue >= 2) && ($hiper>0 || $dijabetes>0)) from accumulate (
+            Symptom(name == "zamor" || name == "nocturia" || name == "otoci nogu i zglobova" || name == "gusenje" ||
+            name == "bol u grudima"
+            )from $symptoms,
+            init(int count = 0;
+            ),
+            action(count += 1;),
+            result(count + (int)$hiper + (int)$dijabetes)
+        )
+    then
+        DiseaseFound diseaseFound = new DiseaseFound($diseaseService.findByName("hronicna bubrezna bolest"), 1, 1);
+        insert(diseaseFound);
+        System.out.println("hbb");
+end
+
+
+rule "Akutna bubrezna povreda"
+    agenda-group "diseases"
+    salience 10
+    lock-on-active
+    no-loop
+    when
+        $diseaseService: DiseaseService();
+        $d: Diagnosis($symptoms: symptoms)
+        Patient($dij: diagnoses)
+        $pritisak: Symptom(name == "temperatura")
+        $temp: Number((intValue) >= 0)from accumulate (
+            Diagnosis(($pritisak memberOf disease.generalSymptoms) && (new Date() < DateUtil.addDays(dateCreated, 14, 0, 0))
+            )from $dij,
+            init(int count = 0;),
+            action(count = 1;),
+            result(count)
+        )
+        $oper: Number() from accumulate(
+            Symptom(name == "operacija"
+            )from $symptoms,
+            init(int count = 0;),
+            action(count = 1;),
+            result(count)
+        )
+        $ant: Number() from accumulate(
+            Diagnosis($lekovi: therapy && (new Date() < DateUtil.addDays(dateCreated, 21, 0, 0))
+            )from $dij,
+            init(int count = 0;),
+            action(for(Object lek: $lekovi){
+                if(((Remedy)lek).getRemedyType() == RemedyType.Antibiotic){
+                    count = 1;
+                    break;
+                }}),
+            result(count)
+        )
+        $k:Number((intValue >= 2) && ($oper > 0 || $temp > 0 || $ant > 0)) from accumulate (
+            Symptom(name == "zamor" || name == "gusenje" || name == "otoci nogu i zglobova" || name == "dijareja"
+            )from $symptoms,
+            init(int count = 0;),
+            action(count += 1;),
+            result(count+(int)$temp+(int)$oper+(int)$ant)
+        )
+    then
+        DiseaseFound diseaseFound = new DiseaseFound($diseaseService.findByName("akutna bubrezna povreda"), 1, 1);
+        insert(diseaseFound);
+        System.out.println("akp");
+end
+
+
 
 rule "Prehlada"
     agenda-group "diseases"
@@ -18,15 +111,15 @@ rule "Prehlada"
     when
         $diesaseService: DiseaseService();
         $diagnosis: Diagnosis($symptoms : symptoms);
-        $k:Number(intValue >= 0) from accumulate (
-            SymptomDTO(name == "kasalj" || name == "kijanje" || name == "glavobolja" || name == "curenje iz nosa" || name == "bol u grlu"
+        $k:Number(intValue >= 4) from accumulate (
+            Symptom(name == "kasalj" || name == "kijanje" || name == "glavobolja" || name == "curenje iz nosa" || name == "bol u grlu"
             )from $symptoms,
             init(int count = 0;),
             action(count += 1;),
             result(count))
     then
     Disease disease = $diesaseService.findByName("prehlada");
-    DiseaseFound found = new DiseaseFound(disease, (double)$k / (double)disease.getGeneralSymptoms().size());
+    DiseaseFound found = new DiseaseFound(disease, (int)$k, disease.getGeneralSymptoms().size());
     insert(found);
     System.out.println("Prehlada" + $k);
     end
@@ -40,7 +133,7 @@ rule "Groznica"
             $diesaseService: DiseaseService();
             $diagnosis: Diagnosis($symptoms : symptoms);
             $k:Number(intValue >= 4) from accumulate (
-                SymptomDTO(name == "kasalj" || name == "kijanje" || name == "bol u grlu" || name == "curenje iz nosa" ||
+                Symptom(name == "kasalj" || name == "kijanje" || name == "bol u grlu" || name == "curenje iz nosa" ||
                                     name == "glavobolja" || name == "drhtavica" || (name == "temperatura" && value > 38)
                 )from $symptoms,
                 init(int count = 0;),
@@ -48,7 +141,7 @@ rule "Groznica"
                 result(count))
         then
         Disease disease = $diesaseService.findByName("groznica");
-        DiseaseFound found = new DiseaseFound(disease, (double)$k / (double)disease.getGeneralSymptoms().size());
+        DiseaseFound found = new DiseaseFound(disease, (int)$k, disease.getGeneralSymptoms().size());
         insert(found);
         System.out.println("Groznica" + $k);
         end
@@ -61,7 +154,7 @@ rule "Upala krajnika"
             $diesaseService: DiseaseService();
             $diagnosis: Diagnosis($symptoms : symptoms);
             $k:Number(intValue >= 4) from accumulate (
-                SymptomDTO(name == "bol u grlu" || name == "bol koji se siri do usiju" || name == "gubitak apetita" || name == "umor" ||
+                Symptom(name == "bol u grlu" || name == "bol koji se siri do usiju" || name == "gubitak apetita" || name == "umor" ||
                                     name == "glavobolja" || name == "drhtavica" || name == "zuti sekret iz nosa" ||
                                     (name == "temperatura" && value >= 40 && value <= 41 )
                 )from $symptoms,
@@ -70,10 +163,87 @@ rule "Upala krajnika"
                 result(count))
         then
         Disease disease = $diesaseService.findByName("upala krajnika");
-        DiseaseFound found =  new DiseaseFound(disease, (double)$k / (double)disease.getGeneralSymptoms().size());
+        DiseaseFound found =  new DiseaseFound(disease, (int)$k, disease.getGeneralSymptoms().size());
         insert(found);
         System.out.println("Upala krajnika" + $k);
         end
+
+rule "Sinusna infekcija"
+    agenda-group "diseases"
+    lock-on-active
+    salience 10
+    when
+        $diseaseService: DiseaseService();
+        $d: Diagnosis($symptoms: symptoms, $date: dateCreated)
+        Patient($dij: diagnoses)
+        $pg: Number(intValue >= 0) from accumulate(
+            Diagnosis(((disease.name == "prehlada") || (disease.name == "groznica"))
+              && (new Date() < DateUtil.addDays(dateCreated, 60, 0, 0))
+            )from $dij,
+            init(int count = 0;),
+            action(count = 1;),
+            result(count)
+        )
+        $k:Number((intValue) >= 4) from accumulate (
+            Symptom(name == "bol u grlu" || name == "glavobolja" || name == "oticanje oko ociju" || name == "zuti sekret iz nosa" ||
+            (name == "temperatura" && value > 38 ) || name == "kasalj"
+            )from $symptoms,
+            init(int count = 0;),
+            action(count += 1;),
+            result(count + (int)$pg)
+        )
+    then
+        Disease disease = $diseaseService.findByName("sinusna infekcija");
+        DiseaseFound nadjenaBolest = new DiseaseFound(disease, (int)$k, disease.getGeneralSymptoms().size() );
+        insert(nadjenaBolest);
+        System.out.println("sinusi  " + $k);
+end
+
+rule "Hipertenzija"
+    agenda-group "diseases"
+    salience 10
+    lock-on-active
+    no-loop
+    when
+        $diseaseService: DiseaseService()
+        Patient($dij: diagnoses)
+        $pritisak: Symptom(name == "visok pritisak")
+        $k: Number((intValue) >= 10)from accumulate (
+            Diagnosis(($pritisak memberOf symptoms) && (new Date() < DateUtil.addDays(dateCreated, 0, 6, 0))
+            )from $dij,
+            init(int count = 0;),
+            action(count += 1;),
+            result(count)
+        )
+    then
+        Disease disease = $diseaseService.findByName("hipertenzija");
+        DiseaseFound nadjenaBolest = new DiseaseFound(disease, 1, 1);
+        insert(nadjenaBolest);
+        System.out.println("hipertenzija");
+end
+
+
+rule "Dijabetes"
+    agenda-group "diseases"
+    salience 10
+    no-loop
+    lock-on-active
+    when
+        $diesaseService: DiseaseService();
+        $d: Diagnosis($simptomi: symptoms)
+        $k:Number(intValue == 4) from accumulate (
+            Symptom(name == "cesto uriniranje" || name == "gubitak telesne tezine" || name == "zamor" || name == "mucnina i povracanje"
+            )from $simptomi,
+            init(int count = 0;),
+            action(count += 1;),
+            result(count)
+        )
+    then
+        Disease disease = $diesaseService.findByName("dijabetes");
+        DiseaseFound nadjenaBolest = new DiseaseFound(disease, 1, 1);
+        insert(nadjenaBolest);
+        System.out.println("dijabetes");
+end
 
 
 rule "Najverovatnija bolest"
@@ -83,7 +253,18 @@ rule "Najverovatnija bolest"
     when
         $disease :DiseaseFound($weight : weight)
         and not DiseaseFound($weight < weight)
-        $list : DiseaseFoundList();
+        $list : DiseaseFoundList(onlyOne == true);
+    then
+        $list.getDiseases().add($disease);
+     end
+
+rule "Bolesti po tezini"
+    no-loop
+    lock-on-active
+    salience -100
+    when
+        $disease :DiseaseFound($weight : weight)
+        $list : DiseaseFoundList(onlyOne == false);
     then
         $list.getDiseases().add($disease);
      end

@@ -1,5 +1,6 @@
 package rs.ac.uns.ftn.sbz.projekat.web.DTOs;
 
+import rs.ac.uns.ftn.sbz.projekat.model.Disease;
 import rs.ac.uns.ftn.sbz.projekat.model.Symptom;
 
 import java.util.ArrayList;
@@ -20,6 +21,24 @@ public class DiseaseDTO {
         this.name = name;
         this.general = general;
         this.specific = specific;
+    }
+
+    public DiseaseDTO(Disease disease) {
+        this.name = disease.getName();
+        general = new ArrayList<>();
+        specific = new ArrayList<>();
+
+        for (Symptom sy :
+                disease.getGeneralSymptoms()) {
+            general.add(new SymptomDTO(sy.getName(), sy.getValue()));
+        }
+
+        for (Symptom sy :
+                disease.getSpecificSymptoms()) {
+            specific.add(new SymptomDTO(sy.getName(), sy.getValue()));
+        }
+
+
     }
 
     public String getName() {
