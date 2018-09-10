@@ -1,7 +1,5 @@
-import {Component} from '@angular/core';
-import {Router} from "@angular/router";
-import {Title} from "@angular/platform-browser";
-import {JwtService} from "./core/services/jwt.service";
+import { Component } from '@angular/core';
+import {HttpClient} from "@angular/common/http";
 
 @Component({
   selector: 'app-root',
@@ -11,7 +9,9 @@ import {JwtService} from "./core/services/jwt.service";
 export class AppComponent {
   title = 'app';
 
-  constructor(private router: Router, private titleService: Title, private jwtService: JwtService){
-    this.titleService.setTitle('SBZ projekat');
+  constructor(http: HttpClient){
+    http.get('http://localhost:8080/api/greeting').subscribe(data => {
+      console.log(data);
+    })
   }
 }

@@ -1,0 +1,61 @@
+import rs.ac.uns.ftn.sbz.projekat.events.Urinating
+import rs.ac.uns.ftn.sbz.projekat.events.SmallOxygenLevel
+import rs.ac.uns.ftn.sbz.projekat.events.Heartbeat
+import rs.ac.uns.ftn.sbz.projekat.events.IntensiveCare
+import rs.ac.uns.ftn.sbz.projekat.events.OxygenLevelIncrease
+import rs.ac.uns.ftn.sbz.projekat.events.OxygenTroubleshoot
+import rs.ac.uns.ftn.sbz.projekat.events.AcceleratedHeartRate
+import rs.ac.uns.ftn.sbz.projekat.events.DialysisEvent
+
+
+rule "problem sa kiseonikom"
+    when
+        $p: IntensiveCare($jmbg: jmbg, oxygenLevel < 70)
+        not(
+             OxygenLevelIncrease($jmbg == jmbg, level > 0)
+             over window:time(15m)
+         )
+    then
+        insert(new OxygenTroubleshoot($jmbg));
+        drools.halt();
+end
+
+rule "ubrzan srcani ritam"
+    when
+        $p: IntensiveCare($jmbg: jmbg)
+        $tik: Heartbeat(jmbg == $jmbg)
+        Number(intValue > 25) from accumulate (
+            $tak: Heartbeat(
+                this != $tik,
+                $jmbg == jmbg,
+                this meets[10s] $tik
+            ),
+            count($tak)
+        )
+    then
+        insert(new AcceleratedHeartRate($jmbg));
+        drools.halt();
+end
+
+rule "hitno potrebna dijaliza"
+    when
+        $p: IntensiveCare($jmbg: jmbg, diagnosis.disease.name == "hronicna bubrezna bolest")
+        $tik: Heartbeat(jmbg == $jmbg)
+        Number(intValue > 10) from accumulate (
+            $tak: Heartbeat(
+                this != $tik,
+                $jmbg == jmbg,
+                this meets[10s] $tik
+            ),
+            count($tak)
+        )
+        Number(intValue < 100) from accumulate (
+            $m2: Urinating(
+            jmbg == $jmbg, $kol: amount
+            ) over window:time(12h),
+            sum($kol)
+        )
+    then
+        insert(new DialysisEvent($jmbg));
+        drools.halt();
+end
