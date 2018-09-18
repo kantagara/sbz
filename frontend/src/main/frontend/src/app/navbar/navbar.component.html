@@ -1,0 +1,29 @@
+<nav class="navbar  navbar-dark bg-primary fixed-top" style="height: 9%; margin-bottom: 80px !important;">
+
+  <div  class="col-lg-1" *ngIf="jwtService.tokenExist() && jwtService.hasRole('ADMIN')">
+    <a class="navbar-brand" routerLink="admin/">Users</a>
+  </div>
+  <div  class="col-lg-1" *ngIf="jwtService.tokenExist() && jwtService.hasRole('ADMIN')">
+    <a class="navbar-brand" routerLink="admin/disease">Diseases</a>
+  </div>
+  <div  class="col-lg-1" *ngIf="jwtService.tokenExist() && jwtService.hasRole('ADMIN')">
+    <a class="navbar-brand" routerLink="admin/remedy">Remedies</a>
+  </div>
+  <div  class="col-lg-1" *ngIf="jwtService.tokenExist() && jwtService.hasRole('ADMIN')">
+    <a class="navbar-brand" routerLink="admin/symptom">Symptoms</a>
+  </div>
+  <div  class="col-lg-1" *ngIf="jwtService.tokenExist() && jwtService.hasRole('DOCTOR')">
+    <a class="navbar-brand" routerLink="doctor">Patients</a>
+  </div>
+  <div  class="col-lg-1" *ngIf="jwtService.tokenExist() && jwtService.hasRole('DOCTOR')">
+    <a class="navbar-brand" routerLink="doctor/report">Reports</a>
+  </div>
+  <div class="col-lg-5"></div>
+
+  <div *ngIf="!jwtService.tokenExist()" class="col-sm-1"><a class="navbar-brand" routerLink="login">Log in</a></div>
+
+  <div *ngIf="jwtService.tokenExist()" class="col-sm-1"><a class="navbar-brand color" style="color: white; cursor: pointer"
+                                                           (click)="logout()" >Log out</a></div>
+</nav>
+<br/>
+<br/>

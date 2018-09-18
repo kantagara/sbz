@@ -83,7 +83,7 @@ rule "Akutna bubrezna povreda"
             )from $dij,
             init(int count = 0;),
             action(for(Object lek: $lekovi){
-                if(((Remedy)lek).getRemedyType() == RemedyType.Antibiotic){
+                if(((Remedy)lek).getRemedyType() == RemedyType.ANTIBIOTIK){
                     count = 1;
                     break;
                 }}),

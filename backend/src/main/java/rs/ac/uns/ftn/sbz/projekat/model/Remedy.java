@@ -18,7 +18,7 @@ public class Remedy {
     @Column
     private RemedyType remedyType;
 
-    @ManyToMany
+    @OneToMany(cascade = CascadeType.DETACH)
     private List<Ingredient> ingredients;
 
     public Remedy() {

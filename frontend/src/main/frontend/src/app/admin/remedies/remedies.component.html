@@ -1,0 +1,30 @@
+
+<div class="row">
+  <div class="col-lg-1">
+    <button class="btn btn-light" (click)="add()">
+      <i class="fa fa-plus"></i>&nbsp;&nbsp;New Remedy
+    </button>
+  </div>
+</div>
+
+<ng-container *ngIf="!remedies || remedies.length == 0">
+  <h2>No remedies!</h2>
+</ng-container>
+
+<ng-container *ngIf="remedies">
+  <div *ngFor="let remedy of remedies">
+    <div class="card-body row bg-dark">
+      <h5  class="col-sm-2" style="color: white">{{remedy.name}}</h5>
+      <h5  class="col-sm-2" style="color: white">{{remedy.remedyType}}</h5>
+      <h5  class="col-sm-2" style="color: white">{{appendAllIngredients(remedy)}}</h5>
+      <span class="col-sm-1"></span>
+      <span class="col-sm-1">
+        <button class="btn btn-info" (click)="change(remedy)">Change</button>
+      </span>
+      <span class="col-sm-1">
+        <button class="btn btn-danger" (click)="delete(remedy)">Delete</button>
+      </span>
+    </div>
+    <br>
+  </div>
+</ng-container>

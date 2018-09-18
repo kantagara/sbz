@@ -65,7 +65,7 @@ public class AccountServiceImpl implements AccountService{
     public void registerUser(AccountDTO accountDTO, String role) {
         Account account = new Account(accountDTO.getUsername(),
                 BCrypt.hashpw(accountDTO.getPassword(), BCrypt.gensalt()),
-                accountDTO.getIme(), accountDTO.getPrezime());
+                accountDTO.getName(), accountDTO.getSurname());
 
         Authority authority = authorityRepository.findByName(role);
         AccountAuthority accountAuthority = new AccountAuthority(account, authority);
@@ -77,12 +77,9 @@ public class AccountServiceImpl implements AccountService{
     @Override
     public void changeAccount(AccountDTO accountDTO) {
         Account account = findByUsername(accountDTO.getUsername());
-
-        BCryptPasswordEncoder bc = new BCryptPasswordEncoder();
-        String pass = bc.encode(account.getPassword());
-        account.setName(account.getName());
-        account.setSurname(account.getSurname());
-        account.setPassword(pass);
+        account.setName(accountDTO.getName());
+        account.setSurname(accountDTO.getSurname());
+        System.out.println(account);
         save(account);
     }
 
@@ -97,6 +94,8 @@ public class AccountServiceImpl implements AccountService{
         if(account == null)
            return false;
 
+        AccountAuthority authority = accountAuthorityRepository.findByAccountId(account.getId());
+        accountAuthorityRepository.delete(authority);
         remove(account);
 
         return true;

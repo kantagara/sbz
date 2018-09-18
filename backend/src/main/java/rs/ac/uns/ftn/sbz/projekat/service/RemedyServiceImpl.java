@@ -17,7 +17,7 @@ public class RemedyServiceImpl implements RemedyService {
     private RemedyRepository remedyRepository;
 
     @Autowired
-    private IngredientService sastojakService;
+    private IngredientService ingredientService;
 
     @Override
     public Remedy findOne(Long id) {
@@ -41,68 +41,69 @@ public class RemedyServiceImpl implements RemedyService {
     }
 
     @Override
-    public Remedy findByNaziv(String naziv){
-        return this.remedyRepository.findByName(naziv);
+    public Remedy findByName(String name){
+        return this.remedyRepository.findByName(name);
     }
 
     @Override
-    public void alter(RemedyDTO remedyDTO) {
-        Remedy lek = findByNaziv(remedyDTO.getName());
-        lek.setRemedyType(remedyDTO.getRemedyType());
+    public void change(RemedyDTO remedyDTO) {
+        Remedy remedy = findByName(remedyDTO.getName());
+        remedy.setRemedyType(remedyDTO.getRemedyType());
 
-        List<Ingredient> zaBrisanje = new ArrayList<>();
+        List<Ingredient> ingredients = new ArrayList<>();
 
-        for (Ingredient sastojak: lek.getIngredients()){
+        for (Ingredient ingredient: remedy.getIngredients()){
             boolean exists = false;
-            for(String naziv_sastojka: remedyDTO.getIngredients()){
-                if(sastojak.getName().equals(naziv_sastojka))
+            for(String name: remedyDTO.getIngredients()){
+                if(ingredient.getName().equals(name))
                     exists = true;
             }
             if(!exists) {
-                zaBrisanje.add(this.sastojakService.findByNaziv(sastojak.getName()));
+                ingredients.add(this.ingredientService.findByNaziv(ingredient.getName()));
             }
         }
 
-        for(Ingredient sastojak: zaBrisanje){
-            this.sastojakService.remove(sastojak);
-            lek.getIngredients().remove(sastojak);
+        for(Ingredient ing: ingredients){
+            remedy.getIngredients().remove(ing);
+            this.ingredientService.remove(ing);
         }
 
-        for(String naziv: remedyDTO.getIngredients()){
-            Ingredient sastojak = this.sastojakService.findByNaziv(naziv);
-            if(sastojak == null){
-                Ingredient novi = new Ingredient(naziv);
-                novi = this.sastojakService.save(novi);
-                lek.getIngredients().add(novi);
+        for(String name: remedyDTO.getIngredients()){
+            Ingredient ingredient = this.ingredientService.findByNaziv(name);
+            if(ingredient == null){
+                Ingredient ing = new Ingredient(name);
+                ing = this.ingredientService.save(ing);
+                remedy.getIngredients().add(ing);
+                ingredientService.save(ing);
             }
-            if(!lek.getIngredients().contains(sastojak))
-                lek.getIngredients().add(sastojak);
+            else if(!remedy.getIngredients().contains(ingredient))
+                remedy.getIngredients().add(ingredient);
         }
 
-        save(lek);
+        save(remedy);
     }
 
     @Override
     public boolean add(RemedyDTO remedyDTO) {
-        Remedy postoji = findByNaziv(remedyDTO.getName());
+        Remedy exists = findByName(remedyDTO.getName());
 
-        if(postoji != null)
+        if(exists != null)
             return false;
 
-        List<Ingredient> sastojciLeka = new ArrayList<>();
+        List<Ingredient> ingredients = new ArrayList<>();
 
         for (String sas : remedyDTO.getIngredients()){
-            Ingredient sastojak = this.sastojakService.findByNaziv(sas);
-            if(sastojak == null)
-                sastojak = this.sastojakService.save(new Ingredient(sas));
-            sastojciLeka.add(sastojak);
+            Ingredient ingredient = this.ingredientService.findByNaziv(sas);
+            if(ingredient == null)
+                ingredient = this.ingredientService.save(new Ingredient(sas));
+            ingredients.add(ingredient);
         }
 
-        Remedy lek = new Remedy(remedyDTO.getRemedyType(), remedyDTO.getName(), sastojciLeka);
+        Remedy remedy = new Remedy(remedyDTO.getRemedyType(), remedyDTO.getName(), ingredients);
 
-        lek = save(lek);
-        for(Ingredient sastojak: sastojciLeka){
-            this.sastojakService.save(sastojak);
+        save(remedy);
+        for(Ingredient ingredient: ingredients){
+            this.ingredientService.save(ingredient);
         }
 
         return true;
@@ -110,27 +111,27 @@ public class RemedyServiceImpl implements RemedyService {
 
     @Override
     public List<RemedyDTO> getAll() {
-        List<Remedy> lekovi = findAll();
+        List<Remedy> remedies = findAll();
         List<RemedyDTO> dtos = new ArrayList<>();
 
-        for(Remedy l: lekovi){
-            List<String> sastojci = new ArrayList<>();
-            for(Ingredient sastojak: l.getIngredients())
-                sastojci.add(sastojak.getName());
-            dtos.add(new RemedyDTO(l.getName(), sastojci, l.getRemedyType()));
+        for(Remedy l: remedies){
+            List<String> ingredients = new ArrayList<>();
+            for(Ingredient ing: l.getIngredients())
+                ingredients.add(ing.getName());
+            dtos.add(new RemedyDTO(l.getName(), ingredients, l.getRemedyType()));
         }
 
         return dtos;
     }
 
     @Override
-    public List<String> getAllIngridients() {
-        List<Ingredient> sastojaci = this.sastojakService.findAll();
-        List<String> nazivi_sastojaka = new ArrayList<>();
-        for(Ingredient sastojak: sastojaci){
-            nazivi_sastojaka.add(sastojak.getName());
+    public List<String> getAllIngredients() {
+        List<Ingredient> ingredients = this.ingredientService.findAll();
+        List<String> names = new ArrayList<>();
+        for(Ingredient name: ingredients){
+            names.add(name.getName());
         }
 
-        return nazivi_sastojaka;
+        return names;
     }
 }

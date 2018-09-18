@@ -1,10 +1,7 @@
 package rs.ac.uns.ftn.sbz.projekat.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import rs.ac.uns.ftn.sbz.projekat.model.Diagnosis;
 import rs.ac.uns.ftn.sbz.projekat.model.Ingredient;
 import rs.ac.uns.ftn.sbz.projekat.model.Patient;
 import rs.ac.uns.ftn.sbz.projekat.model.Remedy;
@@ -79,7 +76,7 @@ public class PatientServiceImpl implements PatientService {
                 new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
 
         for(String remedy: patientDTO.getAllergicToRemedy()){
-            patient.getAllergicToRemedy().add(this.remedyService.findByNaziv(remedy));
+            patient.getAllergicToRemedy().add(this.remedyService.findByName(remedy));
         }
 
         for(String ingredient: patientDTO.getAllergicToIngredient()){
@@ -137,7 +134,7 @@ public class PatientServiceImpl implements PatientService {
                     exists = true;
             }
             if(!exists) {
-                remedies.add(this.remedyService.findByNaziv(lek.getName()));
+                remedies.add(this.remedyService.findByName(lek.getName()));
             }
         }
 
@@ -146,7 +143,7 @@ public class PatientServiceImpl implements PatientService {
         }
 
         for(String name: patientDTO.getAllergicToRemedy()){
-            Remedy lek = this.remedyService.findByNaziv(name);
+            Remedy lek = this.remedyService.findByName(name);
             if(!patient.getAllergicToRemedy().contains(lek))
                 patient.getAllergicToRemedy().add(lek);
         }

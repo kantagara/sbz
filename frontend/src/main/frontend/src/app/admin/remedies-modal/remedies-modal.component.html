@@ -1,0 +1,33 @@
+<div class="modal-lg">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h4 class="modal-title pull-left">User:</h4>
+      <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="row">
+        <h3>Name:</h3>
+        <input type="text" class="form-control" [disabled]="change" [(ngModel)]="remedy.name">
+      </div>
+      <div class="row">
+        <h3>Ingredients:</h3>
+        <input type="text" class="form-control" [(ngModel)]="ingredients">
+      </div>
+      <div class="row">
+        <h3>Remedy Type:</h3>
+
+        <select [(ngModel)]="selectedValue">
+          <option *ngFor="let c of types" [ngValue]="c">{{c}}</option>
+        </select>
+
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-success" (click)="send()">
+        <i class="fa fa-save"></i>&nbsp;&nbsp;Save
+      </button>
+    </div>
+  </div>
+</div>

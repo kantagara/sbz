@@ -1,0 +1,109 @@
+package backend.rules
+
+import rs.ac.uns.ftn.sbz.projekat.model.Patient;
+import rs.ac.uns.ftn.sbz.projekat.model.Disease;
+import rs.ac.uns.ftn.sbz.projekat.model.Diagnosis;
+import rs.ac.uns.ftn.sbz.projekat.model.Account;
+import rs.ac.uns.ftn.sbz.projekat.web.DTOs.PatientListDTO;
+import rs.ac.uns.ftn.sbz.projekat.web.DTOs.PatientDTO;
+import rs.ac.uns.ftn.sbz.projekat.util.DateUtil;
+import java.util.Date;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Set;
+import java.util.HashSet;
+
+rule "spisak pacijenata sa mogucim hronicnim oboljenjima"
+    agenda-group "hronicne"
+    no-loop
+    when
+        $p:Patient($diagnosis: diagnoses)
+        $list: PatientListDTO()
+        $k: Number((intValue) > 5) from accumulate(
+           Diagnosis ( (disease.name != "groznica") && (disease.name != "prehlada") &&
+                (new Date() < DateUtil.addDays(dateCreated, 0, 0, 2))
+            )from $diagnosis,
+            init(int count = 0;),
+            action(count += 1;),
+            result(count)
+        )
+    then
+        $list.getPatients().add(new PatientDTO($p.getName(), $p.getSurname(), $p.getJmbg()));
+        update($list);
+end
+
+rule "spisak zavisnika"
+    agenda-group "zavisnici"
+    lock-on-active
+    when
+        $list: PatientListDTO()
+        $p: Patient($diagnosis: diagnoses)
+        $doktori: Set() from accumulate(
+            Diagnosis(
+                $remedies: therapy, $account: doctor, (new Date() < DateUtil.addDays(dateCreated, 0, 6, 0))
+            )from $diagnosis,
+            init(Set<Account> doc = new HashSet();),
+             action(for(Object remedy: $remedies){
+                    if(((Remedy)remedy).getRemedyType().toString().equals("ANELGETIK")){
+                        doc.add($account);
+                        break;
+                    }}),
+            result(doc)
+        )
+        eval($doktori.size() >= 3)
+        $num: Number((intValue) >= 6) from accumulate(
+            Diagnosis(
+                $remedies: therapy, $account: doctor, (new Date() < DateUtil.addDays(dateCreated, 0, 6, 0))
+            )from $diagnosis,
+            init(int count = 0;),
+             action(for(Object remedy: $remedies){
+                    if(((Remedy)remedy).getRemedyType().toString().equals("ANELGETIK")){
+                        count += 1;
+                    }}),
+            result(count)
+        )
+    then
+        $list.getPatients().add(new PatientDTO($p.getName(), $p.getSurname(), $p.getJmbg()));
+        update($list);
+end
+
+rule "spisak pacijenata sa oslabljenim imunitetom"
+    agenda-group "imunitet"
+    lock-on-active
+    when
+        $spisak: PatientListDTO()
+        $p: Patient($diagnosis: diagnoses)
+        $num: Number((intValue) == 0) from accumulate(
+            Diagnosis(
+                $remedies: therapy, $account: doctor, (new Date() < DateUtil.addDays(dateCreated, 0, 12, 0))
+            )from $diagnosis,
+            init(int count = 0;),
+             action(for(Object remedy: $remedies){
+                    if(!((Remedy)remedy).getRemedyType().toString().equals("ANTIBIOTIK")){
+                        count += 1;
+                    }}),
+            result(count)
+        )
+        $set: Set() from accumulate(
+            Diagnosis(
+                $disease:disease, (new Date() < DateUtil.addDays(dateCreated, 0, 12, 0))
+            )from $diagnosis,
+            init(Set<Disease> doc = new HashSet();),
+             action(doc.add($disease);),
+            result(doc)
+        )
+        $lista: List() from accumulate(
+            Diagnosis(
+                $disease: disease, (new Date() < DateUtil.addDays(dateCreated, 0, 12, 0))
+            )from $diagnosis,
+            init(List<Disease> doc = new ArrayList();),
+             action(doc.add($disease);),
+            result(doc)
+        )
+        eval($set.size() >= 2)
+        eval($lista.size() >= 10)
+    then
+        $spisak.getPatients().add(new PatientDTO($p.getName(), $p.getSurname(), $p.getJmbg()));
+        update($spisak);
+
+end

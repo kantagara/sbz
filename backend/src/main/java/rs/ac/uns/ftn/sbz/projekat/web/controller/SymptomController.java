@@ -34,6 +34,23 @@ public class SymptomController {
         return new ResponseEntity<>(symptomService.findAll(), HttpStatus.OK);
     }
 
+
+    @PutMapping(
+            value = "/",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity change(@RequestBody SymptomDTO symptomDTO) {
+        Symptom symptom = this.symptomService.findByName(symptomDTO.getName());
+        if(symptom == null)
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+        symptom.setValue(symptomDTO.getValue());
+        this.symptomService.save(symptom);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
     @DeleteMapping(
             value = "/",
             produces = MediaType.APPLICATION_JSON_VALUE

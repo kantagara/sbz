@@ -1,0 +1,25 @@
+<div class="modal-lg">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h4 class="modal-title pull-left">User:</h4>
+      <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="row">
+        <h3>Name:</h3>
+        <input type="text" class="form-control" [disabled]="change" [(ngModel)]="symptom.name">
+      </div>
+      <div class="row">
+        <h3>Value:</h3>
+        <input type="number" class="form-control" [(ngModel)]="symptom.value">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-success" (click)="send()">
+        <i class="fa fa-save"></i>&nbsp;&nbsp;Save
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,52 @@
+<div class="modal-lg">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h4 class="modal-title pull-left">User:</h4>
+      <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="row">
+        <h3>Name:</h3>
+        <input type="text" class="form-control" [disabled]="change" [(ngModel)]="disease.name">
+      </div>
+      <div class="row">
+        <h3>General Symptoms:</h3>
+        <select [(ngModel)]="selectedValueGeneral">
+          <option *ngFor="let c of disease.general" [ngValue]="c">{{c.name}}</option>
+        </select>
+        &nbsp;
+        <button class="btn btn-danger" (click)="deleteFromArray(disease.general, selectedValueGeneral)">Delete Symptom</button>
+      </div>
+
+      <div class="row">
+        <h3>Specific Symptoms:</h3>
+        <select [(ngModel)]="selectedValueSpecific">
+          <option *ngFor="let c of disease.specific" [ngValue]="c">{{c.name}}</option>
+        </select>
+        &nbsp;
+        <button class="btn btn-danger" (click)="deleteFromArray(disease.specific, selectedValueSpecific)">Delete Symptom</button>
+      </div>
+      <div class="row">
+        <h3>All Symptoms:</h3>
+        <select [(ngModel)]="selectedValueSymptom">
+          <option *ngFor="let c of symptoms" [ngValue]="c">{{c.name}}</option>
+        </select>
+      </div>
+      <div class="row">
+        <div class="col-lg-4">
+          <button class="btn btn-info" (click)="addToArray(disease.general)">Add to general</button>
+        </div>
+        <div class="col-lg-3">
+          <button class="btn btn-info" (click)="addToArray(disease.specific)">Add to specific</button>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-success" (click)="send()">
+        <i class="fa fa-save"></i>&nbsp;&nbsp;Save
+      </button>
+    </div>
+  </div>
+</div>

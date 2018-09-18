@@ -70,7 +70,7 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
 
-        accountService.registerUser(accountDTO, isAdmin ? "ADMIN" : "DOKTOR");
+        accountService.registerUser(accountDTO, isAdmin ? "ADMIN" : "DOCTOR");
 
         return new ResponseEntity<>(HttpStatus.CREATED);
 
@@ -84,7 +84,7 @@ public class UserController {
     public ResponseEntity changeAccount(@RequestBody AccountDTO accountDTO) {
 
         this.accountService.changeAccount(accountDTO);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(accountDTO, HttpStatus.OK);
     }
 
 
@@ -102,6 +102,7 @@ public class UserController {
 
         return new ResponseEntity<>(dtos, HttpStatus.OK);
     }
+
 
     @DeleteMapping(
             value = "/",

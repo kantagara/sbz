@@ -1,0 +1,49 @@
+
+<div class="row">
+  <div class="col-lg-2"><button class="btn btn-info" (click)="register(true)">New Admin</button>
+    <button class="btn btn-info" (click)="register(false)">New Doctor</button>
+  </div>
+  <div class="col-lg-10"></div>
+</div>
+
+<br/>
+<br/>
+
+<ng-container *ngIf="this.admins">
+  <div *ngFor="let admin of this.admins">
+    <div class="card-body row bg-dark">
+      <h5  class="col-sm-2" style="color: white">{{admin.name}}</h5>
+      <h5  class="col-sm-2" style="color: white">{{admin.surname}}</h5>
+      <h5  class="col-sm-2" style="color: white">{{admin.username}}</h5>
+      <h5  class="col-sm-2" style="color: white">ADMIN</h5>
+      <span class="col-sm-1"></span>
+      <span class="col-sm-1">
+        <button class="btn btn-info" (click)="change(admin)">Change</button>
+      </span>
+      <span class="col-sm-1">
+        <button class="btn btn-danger" (click)="delete(admin, true)">Delete</button>
+      </span>
+    </div>
+    <br>
+  </div>
+</ng-container>
+
+<ng-container *ngIf="this.doctors">
+  <div *ngFor="let doc of this.doctors">
+    <div class="card-body row bg-dark">
+      <h5  class="col-sm-2" style="color: white">{{doc.name}}</h5>
+      <h5  class="col-sm-2" style="color: white">{{doc.surname}}</h5>
+      <h5  class="col-sm-2" style="color: white">{{doc.username}}</h5>
+      <h5  class="col-sm-2" style="color: white">DOCTOR</h5>
+      <span class="col-sm-1"></span>
+      <span class="col-sm-1">
+        <button class="btn btn-info" (click)="change(doc)">Change</button>
+      </span>
+      <span class="col-sm-1">
+        <button class="btn btn-danger" (click)="delete(doc, false)">Delete</button>
+      </span>
+    </div>
+    <br>
+  </div>
+</ng-container>
+

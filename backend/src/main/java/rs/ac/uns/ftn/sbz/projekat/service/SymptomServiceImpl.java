@@ -3,7 +3,9 @@ package rs.ac.uns.ftn.sbz.projekat.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import rs.ac.uns.ftn.sbz.projekat.model.Disease;
 import rs.ac.uns.ftn.sbz.projekat.model.Symptom;
+import rs.ac.uns.ftn.sbz.projekat.repository.DiseaseRepository;
 import rs.ac.uns.ftn.sbz.projekat.repository.SymptomRepository;
 import rs.ac.uns.ftn.sbz.projekat.web.DTOs.SymptomDTO;
 
@@ -16,6 +18,8 @@ public class SymptomServiceImpl implements SymptomService {
     @Autowired
     private SymptomRepository symptomRepository;
 
+    @Autowired
+    private DiseaseRepository diseaseRepository;
 
     @Override
     public Symptom findOne(Long id) {
@@ -45,6 +49,14 @@ public class SymptomServiceImpl implements SymptomService {
         Symptom symptom = findByName(name);
         if(symptom == null)
             return false;
+
+        List<Disease> diseases = diseaseRepository.findAllWhoContainSymptom(symptom.getId());
+        for (Disease disease :
+                diseases) {
+            disease.getGeneralSymptoms().remove(symptom);
+        }
+
+        this.diseaseRepository.save(diseases);
 
         symptomRepository.delete(symptom);
 

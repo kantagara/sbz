@@ -47,4 +47,16 @@ public class Symptom {
     public void setValue(Double value) {
         this.value = value;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Symptom symptom = (Symptom) o;
+
+        if (id != null ? !id.equals(symptom.id) : symptom.id != null) return false;
+        return name != null ? name.equals(symptom.name) : symptom.name == null;
+    }
+
 }

@@ -1,0 +1,28 @@
+
+<div class="row">
+  <div class="col-lg-1">
+    <button class="btn btn-light" (click)="add()">
+      <i class="fa fa-plus"></i>&nbsp;&nbsp;New Remedy
+    </button>
+  </div>
+</div>
+
+<ng-container *ngIf="!diseases || diseases.length == 0">
+  <h2>No diseases!</h2>
+</ng-container>
+
+<ng-container *ngIf="diseases">
+  <div *ngFor="let disease of diseases">
+    <div class="card-body row bg-dark">
+      <h5  class="col-sm-2" style="color: white">{{disease.name}}</h5>
+      <span class="col-sm-1"></span>
+      <span class="col-sm-1">
+        <button class="btn btn-info" (click)="change(disease)">Change</button>
+      </span>
+      <span class="col-sm-1">
+        <button class="btn btn-danger" (click)="delete(disease)">Delete</button>
+      </span>
+    </div>
+    <br>
+  </div>
+</ng-container>

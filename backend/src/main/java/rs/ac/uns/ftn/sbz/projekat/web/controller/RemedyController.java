@@ -40,7 +40,7 @@ public class RemedyController {
     )
     public ResponseEntity getAllIngredients() {
 
-        return new ResponseEntity<>(remedyService.getAllIngridients(), HttpStatus.OK);
+        return new ResponseEntity<>(remedyService.getAllIngredients(), HttpStatus.OK);
     }
 
     @DeleteMapping(
@@ -49,7 +49,7 @@ public class RemedyController {
     )
     public ResponseEntity delete(@RequestParam String name){
 
-        Remedy lek = this.remedyService.findByNaziv(name);
+        Remedy lek = this.remedyService.findByName(name);
         if(lek == null)
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
 
@@ -64,7 +64,7 @@ public class RemedyController {
             produces = MediaType.APPLICATION_JSON_VALUE
     )
     public ResponseEntity alter(@RequestBody RemedyDTO remedyDTO) {
-        this.remedyService.alter(remedyDTO);
+        this.remedyService.change(remedyDTO);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

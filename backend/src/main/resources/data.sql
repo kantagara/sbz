@@ -1,5 +1,5 @@
 insert into authority (id, name) values (1, 'ADMIN');
-insert into authority (id, name) values (2, 'DOKTOR');
+insert into authority (id, name) values (2, 'DOCTOR');
 
 
 insert into account (id, deleted, password, username, name, surname, version)

@@ -1,0 +1,59 @@
+
+import java.util.Date;
+import rs.ac.uns.ftn.sbz.projekat.util.DateUtil;
+import rs.ac.uns.ftn.sbz.projekat.model.Patient;
+import rs.ac.uns.ftn.sbz.projekat.model.Diagnosis;
+import rs.ac.uns.ftn.sbz.projekat.model.Remedy;
+import rs.ac.uns.ftn.sbz.projekat.model.Ingredient;
+import rs.ac.uns.ftn.sbz.projekat.web.DTOs.AllergyListDTO;
+import java.util.List;
+import java.util.ArrayList;
+
+rule "alergije na lekove"
+    agenda-group "alergije"
+    when
+        $p: Patient($remedy_allergy: allergicToRemedy)
+        $d: Diagnosis($remedty_diagnosis: therapy)
+        $list: AllergyListDTO()
+        $c: List() from accumulate(
+            Remedy($naz: name
+            )from $remedy_allergy,
+            init(List<String> lista = new ArrayList();),
+            action(for(Object lek: $remedty_diagnosis){
+                if(((Remedy)lek).getName().equals($naz)){
+                    lista.add($naz);
+                    break;
+                }}),
+            result(lista)
+        )
+    then
+        for(Object o: $c){
+            $list.getNames().add((String)o);
+        }
+end
+
+rule "alergije na sastojke"
+    agenda-group "alergije"
+    when
+        $p: Patient($ingridients_allergy: allergicToIngredient)
+        $d: Diagnosis($remedty_diagnosis: therapy)
+        $list: AllergyListDTO()
+        $c: List() from accumulate(
+            Remedy($sastojci: ingredients, $naz: name
+            )from $remedty_diagnosis,
+            init(List<String> lista = new ArrayList();),
+            action(for(Object sastojak: $sastojci){
+                    for(Object sas: $ingridients_allergy){
+                        if(((Ingredient)sas).getName().equals(((Ingredient)sastojak).getName())){
+                            lista.add($naz);
+                            break;
+                        }
+                    }
+                }),
+            result(lista)
+        )
+    then
+        for(Object o: $c){
+            $list.getNames().add((String)o);
+        }
+end

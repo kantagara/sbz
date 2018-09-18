@@ -8,22 +8,22 @@ public class AccountDTO {
 
     private String password;
 
-    private String ime;
+    private String name;
 
-    private String prezime;
+    private String surname;
 
     public AccountDTO(){}
 
-    public AccountDTO(String username, String password, String ime, String prezime) {
+    public AccountDTO(String username, String password, String name, String surname) {
         this.username = username;
         this.password = password;
-        this.ime = ime;
-        this.prezime = prezime;
+        this.name = name;
+        this.surname = surname;
     }
 
     public AccountDTO(Account account) {
-        this.ime = account.getName();
-        this.prezime = account.getSurname();
+        this.name = account.getName();
+        this.surname = account.getSurname();
         this.username = account.getUsername();
     }
 
@@ -43,19 +43,22 @@ public class AccountDTO {
         this.password = password;
     }
 
-    public String getIme() {
-        return ime;
+    public String getName() {
+        return name;
     }
 
-    public void setIme(String ime) {
-        this.ime = ime;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getPrezime() {
-        return prezime;
+    public String getSurname() {
+        return surname;
     }
 
-    public void setPrezime(String prezime) {
-        this.prezime = prezime;
+    public void setSurname(String surname) {
+        this.surname = surname;
     }
+
+
+
 }

@@ -16,13 +16,13 @@ public interface RemedyService {
 
     void remove(Remedy lek);
 
-    Remedy findByNaziv(String naziv);
+    Remedy findByName(String naziv);
 
-    void alter(RemedyDTO remedyDTO);
+    void change(RemedyDTO remedyDTO);
 
     boolean add(RemedyDTO remedyDTO);
 
     List<RemedyDTO> getAll();
 
-    List<String> getAllIngridients();
+    List<String> getAllIngredients();
 }
