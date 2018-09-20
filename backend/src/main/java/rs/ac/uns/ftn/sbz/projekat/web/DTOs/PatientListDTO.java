@@ -1,5 +1,6 @@
 package rs.ac.uns.ftn.sbz.projekat.web.DTOs;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class PatientListDTO {
@@ -10,6 +11,7 @@ public class PatientListDTO {
     }
 
     public PatientListDTO() {
+        patients = new ArrayList<>();
     }
 
     public List<PatientDTO> getPatients() {
