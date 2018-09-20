@@ -1,5 +1,6 @@
 package rs.ac.uns.ftn.sbz.projekat.web.DTOs;
 
+import java.util.HashSet;
 import java.util.Set;
 
 public class AllergyListDTO {
@@ -11,6 +12,7 @@ public class AllergyListDTO {
     }
 
     public AllergyListDTO() {
+        names = new HashSet<>();
     }
 
     public Set<String> getNames() {

@@ -32,4 +32,12 @@ public class PrescribedRemedyDTO {
     public void setRemedies(List<RemedyDTO> remedies) {
         this.remedies = remedies;
     }
+
+    @Override
+    public String toString() {
+        return "PrescribedRemedyDTO{" +
+                "diagnosisId=" + diagnosisId +
+                ", remedies=" + remedies +
+                '}';
+    }
 }

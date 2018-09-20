@@ -8,7 +8,7 @@
 </div>
 
 <ng-container *ngIf="!patients || patients.length == 0">
-  <h2>No remedies!</h2>
+  <h2>No patients!</h2>
 </ng-container>
 
 <ng-container *ngIf="patients">
@@ -24,7 +24,7 @@
         <button class="btn btn-danger" (click)="delete(patient)">Delete</button>
       </span>
       <span class="col-sm-1">
-        <button class="btn btn-lights" (click)="delete(patient)">Diagnosis</button>
+        <button class="btn btn-lights" (click)="this.router.navigateByUrl('doctor/diagnosis/' + patient.jmbg)">Diagnosis</button>
       </span>
     </div>
     <br>

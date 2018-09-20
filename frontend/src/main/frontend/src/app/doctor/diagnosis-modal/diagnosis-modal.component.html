@@ -1,0 +1,94 @@
+<div class="modal-lg">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h4 class="modal-title pull-left"></h4>
+      <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="row" *ngIf="disease">
+        <table class="table table-hover table-condensed">
+          <thead><h5>Disease: {{disease.name}}</h5></thead>
+          <tbody>
+          <tr *ngFor="let symptom of disease.general">
+            <td>{{symptom.name}}</td>
+          </tr>
+          <tr *ngFor="let symptom of disease.specific">
+            <td>{{symptom.name}}</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="row" *ngIf="diseases">
+        <ng-container *ngFor="let disease of diseases">
+        <table class="table table-hover table-condensed">
+          <thead><h5>Disease: {{disease.disease.name}} Percentage: {{disease.weight  * 100}}%</h5></thead>
+          <tbody>
+          <tr *ngFor="let symptom of disease.disease.general">
+            <td>{{symptom.name}}</td>
+          </tr>
+          <tr *ngFor="let symptom of disease.disease.specific">
+            <td>{{symptom.name}}</td>
+          </tr>
+          </tbody>
+        </table>
+        </ng-container>
+      </div>
+
+
+      <div class="row" *ngIf="diagnoses">
+        <ng-container *ngFor="let diagnosis of diagnoses">
+          <table class="table table-hover table-condensed">
+            <thead><h5>Disease: {{diagnosis.disease}}</h5></thead>
+            <tbody>
+            <tr><td>Date diagnosis created: {{diagnosis.date}}</td></tr>
+            </tbody>
+          </table>
+        </ng-container>
+      </div>
+
+      <div class="row" *ngIf="diagnosis">
+        <h3 style="margin-left: 5%; margin-bottom: 3%">Disease: {{diagnosis.disease}}</h3>
+
+      <div class="row">
+        <h3 style="margin-left: 5%; margin-bottom: 3%">Date created: {{diagnosis.date}}</h3>
+      </div>
+      <div class="row">
+        <div class="col-lg-4"></div>
+        <div class="col-lg-4" *ngIf="diagnosis.remedy">
+          <div *ngIf="diagnosis.remedy.length > 0">
+            <table class="table table-hover table-condensed">
+              <thead><h5>Remedies</h5></thead>
+              <tbody>
+              <tr *ngFor="let remedy of diagnosis.remedy">
+                <td>{{remedy.name}}</td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <br/>
+      <div class="row">
+        <div class="col-lg-4"></div>
+        <div class="col-lg-4" *ngIf="diagnosis.symptoms">
+          <div *ngIf="diagnosis.symptoms.length > 0">
+            <table class="table table-hover table-condensed">
+              <thead><h5>Symptoms</h5></thead>
+              <tbody>
+              <tr *ngFor="let symptom of diagnosis.symptoms">
+                <td>{{symptom.name}}</td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+    </div>
+    </div>
+  </div>
+</div>

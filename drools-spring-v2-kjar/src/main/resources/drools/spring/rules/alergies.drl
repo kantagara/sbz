@@ -39,12 +39,12 @@ rule "alergije na sastojke"
         $d: Diagnosis($remedty_diagnosis: therapy)
         $list: AllergyListDTO()
         $c: List() from accumulate(
-            Remedy($sastojci: ingredients, $naz: name
+            Remedy($ingredients: ingredients, $name: name
             )from $remedty_diagnosis,
             init(List<String> lista = new ArrayList();),
-            action(for(Object sastojak: $sastojci){
+            action(for(Object ingredient: $ingredients){
                     for(Object sas: $ingridients_allergy){
-                        if(((Ingredient)sas).getName().equals(((Ingredient)sastojak).getName())){
+                        if(((Ingredient)sas).getName().equals(((Ingredient)ingredient).getName())){
                             lista.add($naz);
                             break;
                         }

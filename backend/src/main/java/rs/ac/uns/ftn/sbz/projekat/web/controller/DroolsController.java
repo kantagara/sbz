@@ -38,7 +38,7 @@ public class DroolsController {
         if(patient == null)
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
 
-        return new ResponseEntity<>(this.droolsService.getDiseaseBySymptoms(diagnosis, patient, true), HttpStatus.OK);
+        return new ResponseEntity<>(this.droolsService.getDisease(diagnosis), HttpStatus.OK);
     }
 
     @PostMapping
@@ -55,7 +55,7 @@ public class DroolsController {
     }
 
     @PostMapping
-            (value = "personal_diagnosis",
+            (value = "/personal_diagnosis",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity personalDiagnosis(@RequestBody DiagnosisDTO diagnosisDTO){
@@ -82,6 +82,8 @@ public class DroolsController {
                 consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity prescribeRemedies(@RequestHeader("Authentication-Token") String token,
                                             @RequestBody PrescribedRemedyDTO prescribedRemedyDTO){
+        System.out.println(token);
+        System.out.println(prescribedRemedyDTO);
 
         return new ResponseEntity(this.remedyService.prescribe(token, prescribedRemedyDTO)
                 ? HttpStatus.OK : HttpStatus.BAD_REQUEST);

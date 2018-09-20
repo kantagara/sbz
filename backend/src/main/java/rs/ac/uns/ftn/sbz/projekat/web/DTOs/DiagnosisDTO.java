@@ -33,6 +33,7 @@ public class DiagnosisDTO {
         remedy = new ArrayList<>();
         id = diagnosis.getId();
         jmbg = diagnosis.getPatient().getJmbg();
+        disease = diagnosis.getDisease().getName();
         date = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(diagnosis.getDateCreated());
         diagnosis.getSymptoms().forEach(s -> symptoms.add(new SymptomDTO(s.getName(), s.getValue())));
         diagnosis.getTherapy().forEach(t -> remedy.add(new RemedyDTO(t)));
@@ -76,5 +77,18 @@ public class DiagnosisDTO {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+
+    @Override
+    public String toString() {
+        return "DiagnosisDTO{" +
+                "disease='" + disease + '\'' +
+                ", date='" + date + '\'' +
+                ", jmbg='" + jmbg + '\'' +
+                ", symptoms=" + symptoms +
+                ", remedy=" + remedy +
+                ", id=" + id +
+                '}';
     }
 }

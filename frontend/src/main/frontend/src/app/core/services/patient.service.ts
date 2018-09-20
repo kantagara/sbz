@@ -23,6 +23,10 @@ export class PatientService {
     return this.http.delete(this.url+"?jmbg="+jmbg);
   }
 
+  getByJmbg(jmbg: string):Observable<any>{
+    return this.http.get(this.url+"/jmbg?jmbg="+jmbg);
+  }
+
   change(disease: Patient){
     return this.http.put(this.url, disease);
   }

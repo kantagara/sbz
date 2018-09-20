@@ -8,7 +8,7 @@ import {ReportComponent} from "./report/report.component";
 
 const routes: Routes = [
   { path: 'patient', component: PatientComponent },
-  { path: 'diagnosis', component: DiagnosisComponent},
+  { path: 'diagnosis/:jmbg', component: DiagnosisComponent},
   { path: 'report', component: ReportComponent},
 ];
 

@@ -1,3 +1,95 @@
-<p>
-  diagnosis works!
-</p>
+
+<div class="row" *ngIf="patient">
+  <div class="col-lg-2"><h4 style="margin-left: 10%">{{patient.name}}</h4></div>
+  <div class="col-lg-2"><h4 style="margin-left: 5%">{{patient.surname}}</h4></div>
+  <div class="col-lg-2"><h4 style="margin-left: 5%">{{patient.jmbg}}</h4></div>
+</div>
+<div class="row">
+  <div class="col-lg-10" style="margin-left: 5%; margin-bottom: 2%">
+    <h3>Symptoms:</h3>
+    <textarea type="text" rows="5" class="form-control"  [(ngModel)]="symptoms"></textarea>
+  </div>
+</div>
+<div class="row" style="margin-bottom: 2%">
+  <div class="col-lg-2"></div>
+  <div class="col-lg-3"style="margin-left: 4%">
+    <button class="btn btn-warning" (click)="disease()">Most likely disease</button>
+  </div>
+  <div class="col-lg-3" style="margin-left: 5%">
+    <button class="btn btn-success" (click)="listDiseases()">Diseases arranged by number of symptoms they meet</button>
+  </div>
+  <div class="col-lg-1"></div>
+
+</div>
+
+<div class="row">
+  <div class="col-lg-3" style="margin-left: 5%; margin-bottom: 2%">
+    <h3>Disease Name:</h3>
+    <input type="text" class="form-control" [(ngModel)]="diseaseName"/>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-lg-2" style="margin-left: 5%;">
+    <button class="btn btn-info" (click)="getSymptoms()">Get disease symptoms</button>
+  </div>
+  <div class="col-lg-2">
+    <button class="btn btn-danger" (click)="personal()">Personal diagnosis</button>
+  </div>
+
+  <div class="col-lg-2">
+    <button class="btn btn-success" (click)="diseaseHistory()">Disease history</button>
+  </div>
+</div>
+
+<br/>
+<br/>
+<br/>
+
+
+<div *ngIf="diagnosis_determined">
+  <h3>Disease found:</h3>
+  <div class="card-body row bg-dark">
+    <h4 style="color: white;">{{diagnosis_determined.disease}}</h4>
+    <h4 style="color: white;">{{diagnosis_determined.date}}</h4>
+  </div>
+  <div class="row" style="margin-top: 2%">
+    <h5 style="margin-left: 5%">Prescribed Remedies:</h5>
+    <div class="col-lg-4">
+      <select class="form-control" [(ngModel)]="remedy" required>
+        <option *ngFor="let pow of remedies" [ngValue]="pow">{{pow.name}}</option>
+      </select>
+    </div>
+    <div class="col-lg-2">
+      <button type="button" class="btn btn-default" (click)="addRemedy()">
+        <i class="fa fa-plus"></i>&nbsp;&nbsp;Add
+      </button>
+    </div>
+    <div class="col-lg-2">
+      <button type="button" class="btn btn-success" (click)="prescribeRemedies()">
+        <i class="fa fa-save"></i>&nbsp;&nbsp;Confirm
+      </button>
+    </div>
+    <div class="col-lg-2">
+      <button type="button" class="btn btn-danger" (click)="checkForAllergies()">
+        <i class="fa fa-save"></i>&nbsp;&nbsp;Allergies
+      </button>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-4"></div>
+    <div class="col-lg-4" *ngIf="diagnosis.remedy">
+      <div *ngIf="diagnosis.remedy.length > 0">
+        <table class="table table-hover table-condensed">
+          <tbody>
+          <tr *ngFor="let remedy of diagnosis.remedy">
+            <td>{{remedy.name}}</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<toaster-container [toasterconfig]="toasterConfig"></toaster-container>

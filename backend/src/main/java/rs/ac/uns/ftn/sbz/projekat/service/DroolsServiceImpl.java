@@ -60,18 +60,52 @@ public class DroolsServiceImpl implements DroolsService {
 
         System.out.println(kieSession.fireAllRules());
 
-        if(diseaseFound.getDiseases().size() > 0)
-            diseaseFound.getDiseases().forEach(d -> System.out.println(d.getDisease().getName() + "  " + d.getWeight()));
-
+        if(diseaseFound.getDiseases().size() > 0) {
+            this.diagnosisService.save(diagnosis);
+        }
 
         return new DiseaseFoundListDTO(diseaseFound);
+    }
+
+    @Override
+    public DiagnosisDTO getDisease(DiagnosisDTO diagnosisDTO) {
+        Patient patient = this.patientService.findByJmbg(diagnosisDTO.getJmbg());
+        Diagnosis diagnosis = new Diagnosis();
+        DiseaseFoundList diseaseFound = new DiseaseFoundList();
+
+        addSymptomsToDiagnosis(diagnosis, diagnosisDTO.getSymptoms());
+
+        diagnosis.setDateCreated(new Date());
+        diagnosis.setPatient(patient);
+
+        kieSession.getAgenda().getAgendaGroup("diseases").setFocus();
+        kieSession.insert(diseaseFound);
+        kieSession.insert(diseaseService);
+        kieSession.insert(diagnosisService);
+        kieSession.insert(diagnosis);
+        diseaseFound.setOnlyOne(true);
+
+        System.out.println(kieSession.fireAllRules());
+
+        if(diseaseFound.getDiseases().size() > 0) {
+            diagnosis.setDisease(diseaseFound.getDiseases().get(0).getDisease());
+            this.diagnosisService.save(diagnosis);
+            diagnosisDTO.setId(diagnosis.getId());
+            diagnosisDTO.setDisease(diagnosis.getDisease().getName());
+            diagnosisDTO.setDate(new SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(diagnosis.getDateCreated()));
+            patient.getDiagnoses().add(diagnosis);
+            this.patientService.save(patient);
+            return diagnosisDTO;
+        }
+
+        return  null;
     }
 
     @Override
     public DiagnosisDTO personalDiagnosis(DiagnosisDTO diagnosisDTO) {
         Diagnosis diagnosis = new Diagnosis();
         diagnosis.setDateCreated(new Date());
-
+        System.out.println(diagnosisDTO.toString());
         Patient patient = this.patientService.findByJmbg(diagnosisDTO.getJmbg());
         if(patient == null)
             return null;
@@ -86,6 +120,8 @@ public class DroolsServiceImpl implements DroolsService {
         diagnosis.setDisease(disease);
         addSymptomsToDiagnosis(diagnosis, diagnosisDTO.getSymptoms());
         diagnosisService.save(diagnosis);
+        patient.getDiagnoses().add(diagnosis);
+        patientService.save(patient);
         diagnosisDTO.setDate( new SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(new Date()));
         diagnosisDTO.setId(diagnosis.getId());
 

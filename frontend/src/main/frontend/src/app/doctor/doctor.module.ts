@@ -9,6 +9,7 @@ import {CoreModule} from "../core/core.module";
 import { PatientModalComponent } from './patient-modal/patient-modal.component';
 import {CommonModule} from "@angular/common";
 import { ReportComponent } from './report/report.component';
+import { DiagnosisModalComponent } from './diagnosis-modal/diagnosis-modal.component';
 
 @NgModule({
   imports: [
@@ -19,7 +20,7 @@ import { ReportComponent } from './report/report.component';
     ToasterModule,
     FormsModule
   ],
-  declarations: [DiagnosisComponent, PatientComponent, PatientModalComponent, ReportComponent],
-  entryComponents: [PatientModalComponent]
+  declarations: [DiagnosisComponent, PatientComponent, PatientModalComponent, ReportComponent, DiagnosisModalComponent],
+  entryComponents: [PatientModalComponent, DiagnosisModalComponent]
 })
 export class DoctorModule { }

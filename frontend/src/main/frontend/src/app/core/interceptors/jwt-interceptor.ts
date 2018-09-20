@@ -10,7 +10,7 @@ export class JwtInterceptor implements HttpInterceptor {
   constructor(public jwtService: JwtService) { }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    if(this.jwtService.tokenExist() && !this.jwtService.isTokenExpired()) {
+    if(this.jwtService.tokenExist()) {
       req = req.clone({
         setHeaders: {
           'Authentication-Token': this.jwtService.getToken()

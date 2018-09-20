@@ -153,13 +153,14 @@ public class RemedyServiceImpl implements RemedyService {
     public boolean prescribe(String token, PrescribedRemedyDTO prescribedRemedyDTO) {
 
         Account account = this.accountService.findByUsername(jwtUtils.getUsernameFromToken(token));
-
+        System.out.println("AA");
         if(account == null) return false;
 
         Diagnosis diagnosis = diagnosisService.findOne(prescribedRemedyDTO.getDiagnosisId());
-
+        System.out.println("BBB");
+        System.out.println(prescribedRemedyDTO);
         if(diagnosis == null) return false;
-
+        System.out.println("CCCCC");
         for (int i = 0; i < prescribedRemedyDTO.getRemedies().size(); i++) {
             RemedyDTO dto = prescribedRemedyDTO.getRemedies().get(i);
             Remedy remedy = remedyRepository.findByName(dto.getName());

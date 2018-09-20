@@ -13,11 +13,11 @@ export class DroolsService {
   }
 
 
-  getDiesease(diagnosis : Diagnosis){
+  getDiesease(diagnosis : Diagnosis) : Observable<any>{
     return this.http.post(`${this.url}/disease`, diagnosis);
   }
 
-  mostLikely(diagnosis : Diagnosis) {
+  mostLikely(diagnosis : Diagnosis): Observable<any> {
     return this.http.post(`${this.url}/most_likely`, diagnosis);
   }
 
@@ -33,7 +33,7 @@ export class DroolsService {
     return this.http.post(`${this.url}/prescribe`, prescription);
   }
 
-  allergies( diagnosis : number){
+  allergies( diagnosis : number): Observable<any>{
       return this.http.get(`${this.url}/allergies?diagnosisId=${diagnosis}`);
   }
 

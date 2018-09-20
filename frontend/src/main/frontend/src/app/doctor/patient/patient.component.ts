@@ -3,6 +3,7 @@ import {Patient} from "../../shared/models/patient";
 import {BsModalRef, BsModalService} from "ngx-bootstrap";
 import {PatientService} from "../../core/services/patient.service";
 import {PatientModalComponent} from "../patient-modal/patient-modal.component";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-patient',
@@ -15,7 +16,7 @@ export class PatientComponent implements OnInit {
   modalRef: BsModalRef;
   patient : Patient;
 
-  constructor(private patientService: PatientService,  private modalService : BsModalService) {
+  constructor(private router: Router, private patientService: PatientService,  private modalService : BsModalService) {
     patientService.getAll().subscribe(data => this.patients = data);
     this.patient = new Patient('', '', '', [], [], []);
   }
@@ -30,8 +31,9 @@ export class PatientComponent implements OnInit {
     this.modalRef.content.modalRef = this.modalRef;
     this.patient = new Patient('', '', '', [], [], []);
     this.modalRef.content.change = false;
-    this.modalRef.content.remedy = this.patient;
+    this.modalRef.content.patient = this.patient;
     this.modalRef.content.save.subscribe(data =>{
+      console.log(this.patient);
       this.patientService.add(data).subscribe(d => this.patients.push(new Patient(this.patient.name,
         this.patient.surname, this.patient.jmbg, this.patient.allergicToRemedy, this.patient.allergicToIngredient,
         this.patient.diagnosis)));

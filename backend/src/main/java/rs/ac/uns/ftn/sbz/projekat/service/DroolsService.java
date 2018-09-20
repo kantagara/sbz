@@ -9,6 +9,8 @@ public interface DroolsService {
 
     DiseaseFoundListDTO getDiseaseBySymptoms(DiagnosisDTO diagnosisDTO, Patient patient, boolean onlyOne);
 
+    DiagnosisDTO getDisease(DiagnosisDTO diagnosisDTO);
+
     DiagnosisDTO personalDiagnosis(DiagnosisDTO diagnosisDTO);
 
     DiseaseDTO getSymptomsByDisease(String name);
