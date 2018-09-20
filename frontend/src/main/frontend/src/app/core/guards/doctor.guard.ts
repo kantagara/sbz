@@ -7,6 +7,6 @@ export class DoctorGuard implements CanActivate {
   constructor(private jwtService: JwtService) { }
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-    return this.jwtService.tokenExist() && this.jwtService.hasRole('DOKTOR');
+    return this.jwtService.tokenExist() && this.jwtService.hasRole('DOCTOR');
   }
 }

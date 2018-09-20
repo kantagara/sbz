@@ -57,6 +57,11 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
+    public List<Patient> findAllFromDB() {
+        return this.patientRepository.findAll();
+    }
+
+    @Override
     public void remove(Patient patient) {
         patientRepository.delete(findByJmbg(patient.getJmbg()).getId());
     }

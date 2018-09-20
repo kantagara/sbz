@@ -1,0 +1,60 @@
+<div class="modal-lg">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h4 class="modal-title pull-left">User:</h4>
+      <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="row">
+        <h3>Name:</h3>
+        <input type="text" class="form-control" [disabled]="change" [(ngModel)]="patient.name">
+      </div>
+      <div class="row">
+        <h3>Surname:</h3>
+        <input type="text" class="form-control" [disabled]="change"[(ngModel)]="patient.surname">
+      </div>
+      <div class="row">
+        <h3>JMBG:</h3>
+        <input type="text" class="form-control" [disabled]="change" [(ngModel)]="patient.jmbg">
+      </div>
+      <div class="row">
+        <h3>Allergic to ingredient:</h3>
+        <select style="min-width: 80px; margin-right: 10px" [(ngModel)]="selectedValuePatientIngredient">
+          <option *ngFor="let c of patient.allergicToIngredient" [ngValue]="c">{{c}}</option>
+        </select>
+        <button class="btn btn-danger" (click)="removeItemFromList(this.patient.allergicToIngredient,
+        this.selectedValuePatientIngredient)">Remove</button>
+      </div>
+      <div class="row">
+        <h3>Allergic to remedy:</h3>
+        <select style="min-width: 80px; margin-right: 10px" [(ngModel)]="selectedValuePatientRemedy">
+          <option *ngFor="let c of patient.allergicToRemedy" [ngValue]="c">{{c}}</option>
+        </select>
+        <button class="btn btn-danger" (click)="removeItemFromList(this.patient.allergicToRemedy, this.selectedValuePatientRemedy)">Remove</button>
+      </div>
+
+      <br/>
+      <br/>
+      <div class="row">
+        <h3>Allergic to ingredient:</h3>
+        <select style="min-width: 80px; margin-right: 10px" [(ngModel)]="selectedValueIngredient">
+          <option *ngFor="let c of ingredients" [ngValue]="c">{{c}}</option>
+        </select>
+        <button class="btn btn-primary" (click)="addIngredientsToAllergyList()">Add</button>
+      </div>
+      <div class="row">
+        <h3>Allergic to remedy:</h3>
+        <select style="min-width: 80px; margin-right: 10px" [(ngModel)]="selectedValueRemedy">
+          <option *ngFor="let c of remedies" [ngValue]="c">{{c.name}}</option>
+        </select>
+        <button class="btn btn-primary" (click)="addRemedyToAllergyList()">Add</button>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-success" (click)="send()">
+        <i class="fa fa-save"></i>&nbsp;&nbsp;Save
+      </button>
+    </div>
+  </div>
+</div>

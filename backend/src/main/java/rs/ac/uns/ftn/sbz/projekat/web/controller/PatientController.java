@@ -54,10 +54,10 @@ public class PatientController {
     }
 
     @DeleteMapping(
-            value = "/{jmbg}",
+            value = "/",
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity delete(@PathVariable String jmbg){
+    public ResponseEntity delete(@RequestParam String jmbg){
 
         Patient patient = this.patientService.findByJmbg(jmbg);
         if(patient == null)

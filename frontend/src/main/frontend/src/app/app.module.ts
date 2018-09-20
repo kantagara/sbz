@@ -20,6 +20,8 @@ import {UsersService} from "./core/services/users.service";
 import {RemedyService} from "./core/services/remedy.service";
 import {SymptomService} from "./core/services/symptom.service";
 import {DiseaseService} from "./core/services/disease.service";
+import {PatientService} from "./core/services/patient.service";
+import {DroolsService} from "./core/services/drools.service";
 
 
 
@@ -49,7 +51,7 @@ import {DiseaseService} from "./core/services/disease.service";
       provide: HTTP_INTERCEPTORS,
       useClass: JwtInterceptor,
       multi: true
-    }, UsersService, RemedyService, SymptomService, DiseaseService]
+    }, UsersService, RemedyService, SymptomService, DiseaseService, PatientService, DroolsService]
   ,
   bootstrap: [AppComponent]
 })

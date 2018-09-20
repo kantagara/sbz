@@ -10,8 +10,12 @@ export class RemedyService {
   constructor(private http: HttpClient) { }
 
 
-  getAll() : Observable<any>{
+  getAll() : Observable<any> {
     return this.http.get(this.url);
+  }
+
+  getAllIngerdients() : Observable<any>{
+    return this.http.get(`${this.url}/ingredients`);
   }
 
   add(remedy: Remedy){

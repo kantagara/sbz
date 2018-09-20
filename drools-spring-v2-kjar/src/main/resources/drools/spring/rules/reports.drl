@@ -13,8 +13,8 @@ import java.util.ArrayList;
 import java.util.Set;
 import java.util.HashSet;
 
-rule "spisak pacijenata sa mogucim hronicnim oboljenjima"
-    agenda-group "hronicne"
+rule "List of patients with cronical diseases"
+    agenda-group "chronical"
     no-loop
     when
         $p:Patient($diagnosis: diagnoses)
@@ -32,8 +32,8 @@ rule "spisak pacijenata sa mogucim hronicnim oboljenjima"
         update($list);
 end
 
-rule "spisak zavisnika"
-    agenda-group "zavisnici"
+rule "List of addictors"
+    agenda-group "addictions"
     lock-on-active
     when
         $list: PatientListDTO()
@@ -67,8 +67,8 @@ rule "spisak zavisnika"
         update($list);
 end
 
-rule "spisak pacijenata sa oslabljenim imunitetom"
-    agenda-group "imunitet"
+rule "Low immunity patients"
+    agenda-group "imunity"
     lock-on-active
     when
         $spisak: PatientListDTO()

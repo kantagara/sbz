@@ -71,6 +71,11 @@ public class DiseaseServiceImpl implements DiseaseService {
     }
 
     @Override
+    public List<Disease> findAllFromDB() {
+        return this.diseaseRepository.findAll();
+    }
+
+    @Override
     public Disease findByName(String name){
         return this.diseaseRepository.findByName(name);
     }

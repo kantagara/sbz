@@ -46,7 +46,7 @@ export class DiseasesModalComponent implements OnInit {
   }
 
   addToArray(array : Array<Symptom>){
-    if(this.selectedValueSymptom == ''){
+    if(this.selectedValueSymptom == null || this.selectedValueSymptom.name == ''){
       alert("None value has been selected");
       return;
     }

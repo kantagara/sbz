@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.ArrayList;
 
 rule "alergije na lekove"
-    agenda-group "alergije"
+    agenda-group "allergies"
     when
         $p: Patient($remedy_allergy: allergicToRemedy)
         $d: Diagnosis($remedty_diagnosis: therapy)
@@ -33,7 +33,7 @@ rule "alergije na lekove"
 end
 
 rule "alergije na sastojke"
-    agenda-group "alergije"
+    agenda-group "allergies"
     when
         $p: Patient($ingridients_allergy: allergicToIngredient)
         $d: Diagnosis($remedty_diagnosis: therapy)

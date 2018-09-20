@@ -2,9 +2,13 @@ package rs.ac.uns.ftn.sbz.projekat.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import rs.ac.uns.ftn.sbz.projekat.model.Account;
+import rs.ac.uns.ftn.sbz.projekat.model.Diagnosis;
 import rs.ac.uns.ftn.sbz.projekat.model.Remedy;
 import rs.ac.uns.ftn.sbz.projekat.model.Ingredient;
 import rs.ac.uns.ftn.sbz.projekat.repository.RemedyRepository;
+import rs.ac.uns.ftn.sbz.projekat.security.JWTUtils;
+import rs.ac.uns.ftn.sbz.projekat.web.DTOs.PrescribedRemedyDTO;
 import rs.ac.uns.ftn.sbz.projekat.web.DTOs.RemedyDTO;
 
 import java.util.ArrayList;
@@ -18,6 +22,16 @@ public class RemedyServiceImpl implements RemedyService {
 
     @Autowired
     private IngredientService ingredientService;
+
+    @Autowired
+    private AccountService accountService;
+
+    @Autowired
+    private JWTUtils jwtUtils;
+
+    @Autowired
+    private DiagnosisService diagnosisService;
+
 
     @Override
     public Remedy findOne(Long id) {
@@ -133,5 +147,29 @@ public class RemedyServiceImpl implements RemedyService {
         }
 
         return names;
+    }
+
+    @Override
+    public boolean prescribe(String token, PrescribedRemedyDTO prescribedRemedyDTO) {
+
+        Account account = this.accountService.findByUsername(jwtUtils.getUsernameFromToken(token));
+
+        if(account == null) return false;
+
+        Diagnosis diagnosis = diagnosisService.findOne(prescribedRemedyDTO.getDiagnosisId());
+
+        if(diagnosis == null) return false;
+
+        for (int i = 0; i < prescribedRemedyDTO.getRemedies().size(); i++) {
+            RemedyDTO dto = prescribedRemedyDTO.getRemedies().get(i);
+            Remedy remedy = remedyRepository.findByName(dto.getName());
+            if(remedy == null) return false;
+
+            diagnosis.getTherapy().add(remedy);
+        }
+
+        this.diagnosisService.save(diagnosis);
+
+        return true;
     }
 }

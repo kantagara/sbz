@@ -2,6 +2,7 @@ package rs.ac.uns.ftn.sbz.projekat.service;
 
 
 import rs.ac.uns.ftn.sbz.projekat.model.Remedy;
+import rs.ac.uns.ftn.sbz.projekat.web.DTOs.PrescribedRemedyDTO;
 import rs.ac.uns.ftn.sbz.projekat.web.DTOs.RemedyDTO;
 
 import java.util.List;
@@ -25,4 +26,6 @@ public interface RemedyService {
     List<RemedyDTO> getAll();
 
     List<String> getAllIngredients();
+
+    boolean prescribe(String token, PrescribedRemedyDTO prescribedRemedyDTO);
 }

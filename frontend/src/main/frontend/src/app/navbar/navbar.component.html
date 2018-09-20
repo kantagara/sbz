@@ -13,7 +13,7 @@
     <a class="navbar-brand" routerLink="admin/symptom">Symptoms</a>
   </div>
   <div  class="col-lg-1" *ngIf="jwtService.tokenExist() && jwtService.hasRole('DOCTOR')">
-    <a class="navbar-brand" routerLink="doctor">Patients</a>
+    <a class="navbar-brand" routerLink="doctor/patient">Patients</a>
   </div>
   <div  class="col-lg-1" *ngIf="jwtService.tokenExist() && jwtService.hasRole('DOCTOR')">
     <a class="navbar-brand" routerLink="doctor/report">Reports</a>

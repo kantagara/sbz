@@ -1,0 +1,32 @@
+
+<div class="row">
+  <div class="col-lg-1">
+    <button class="btn btn-light" (click)="add()">
+      <i class="fa fa-plus"></i>&nbsp;&nbsp;New Patient
+    </button>
+  </div>
+</div>
+
+<ng-container *ngIf="!patients || patients.length == 0">
+  <h2>No remedies!</h2>
+</ng-container>
+
+<ng-container *ngIf="patients">
+  <div *ngFor="let patient of patients">
+    <div class="card-body row bg-dark">
+      <h5  class="col-sm-2" style="color: white">{{patient.name}}</h5>
+      <h5  class="col-sm-2" style="color: white">{{patient.surname}}</h5>
+      <h5  class="col-sm-2" style="color: white">{{patient.jmbg}}</h5>
+      <span class="col-sm-1">
+        <button class="btn btn-info" (click)="change(patient)">Change</button>
+      </span>
+      <span class="col-sm-1">
+        <button class="btn btn-danger" (click)="delete(patient)">Delete</button>
+      </span>
+      <span class="col-sm-1">
+        <button class="btn btn-lights" (click)="delete(patient)">Diagnosis</button>
+      </span>
+    </div>
+    <br>
+  </div>
+</ng-container>

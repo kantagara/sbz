@@ -12,6 +12,7 @@ public interface DiseaseService {
     Disease findOne(Long id);
 
     List<DiseaseDTO> findAll();
+    List<Disease> findAllFromDB();
 
     boolean remove(String name);
 

@@ -13,6 +13,8 @@ public interface PatientService {
 
     List<PatientDTO> findAll();
 
+    List<Patient> findAllFromDB();
+
     void remove(Patient patient);
 
     Patient findByJmbg(String jmbg);
