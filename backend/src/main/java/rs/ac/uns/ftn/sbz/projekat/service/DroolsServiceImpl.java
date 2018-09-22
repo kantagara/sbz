@@ -58,6 +58,15 @@ public class DroolsServiceImpl implements DroolsService {
         kieSession.insert(diagnosis);
         diseaseFound.setOnlyOne(onlyOne);
 
+        for (Symptom symptom :
+                diagnosis.getSymptoms()) {
+            kieSession.insert(symptom);
+            System.out.println(symptom);
+        }
+
+        kieSession.insert(patient);
+
+
         System.out.println(kieSession.fireAllRules());
 
         if(diseaseFound.getDiseases().size() > 0) {
@@ -73,7 +82,14 @@ public class DroolsServiceImpl implements DroolsService {
         Diagnosis diagnosis = new Diagnosis();
         DiseaseFoundList diseaseFound = new DiseaseFoundList();
 
+
         addSymptomsToDiagnosis(diagnosis, diagnosisDTO.getSymptoms());
+
+        for (Symptom symptom :
+                diagnosis.getSymptoms()) {
+            kieSession.insert(symptom);
+            System.out.println(symptom);
+        }
 
         diagnosis.setDateCreated(new Date());
         diagnosis.setPatient(patient);
@@ -81,6 +97,7 @@ public class DroolsServiceImpl implements DroolsService {
         kieSession.getAgenda().getAgendaGroup("diseases").setFocus();
         kieSession.insert(diseaseFound);
         kieSession.insert(diseaseService);
+        kieSession.insert(patient);
         kieSession.insert(diagnosisService);
         kieSession.insert(diagnosis);
         diseaseFound.setOnlyOne(true);

@@ -35,14 +35,14 @@ insert into symptom (id, name, value) values (116, 'zamor', null);
 insert into symptom (id, name, value) values (117, 'mucnina i povracanje', null);
 insert into symptom (id, name, value) values (118, 'nocturia', null);
 insert into symptom (id, name, value) values (119, 'otoci nogu i zglobova', null);
-insert into symptom (id, name, value) values (120, 'gusnje', null);
+insert into symptom (id, name, value) values (120, 'gusenje', null);
 insert into symptom (id, name, value) values (121, 'bol u grudima', null);
 insert into symptom (id, name, value) values (122, 'dijareja', null);
 insert into symptom (id, name, value) values (123, 'p/g u 60', null);
 insert into symptom (id, name, value) values (124, 'visok pritisak 10x', null);
 insert into symptom (id, name, value) values (125, 'boluje od dijabetesa', null);
 insert into symptom (id, name, value) values (126, 'boluje od hipertenzije', null);
-insert into symptom (id, name, value) values (127, 'oporavak', null);
+insert into symptom (id, name, value) values (127, 'operacija', null);
 insert into symptom (id, name, value) values (128, 'bolest sa temperaturom', null);
 insert into symptom (id, name, value) values (129, 'bolest sa antibioticima', null);
 
@@ -52,7 +52,7 @@ insert into disease(id, name) values (103, 'upala krajnika');
 insert into disease(id, name) values (104, 'sinusna infekcija');
 insert into disease(id, name) values (105, 'hipertenzija');
 insert into disease(id, name) values (106, 'dijabetes');
-insert into disease(id, name) values (107, 'hronicna bubrezna disease');
+insert into disease(id, name) values (107, 'hronicna bubrezna bolest');
 insert into disease(id, name) values (108, 'akutna bubrezna povreda');
 
 

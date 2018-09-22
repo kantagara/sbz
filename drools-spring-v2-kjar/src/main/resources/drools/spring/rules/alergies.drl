@@ -45,7 +45,7 @@ rule "alergije na sastojke"
             action(for(Object ingredient: $ingredients){
                     for(Object sas: $ingridients_allergy){
                         if(((Ingredient)sas).getName().equals(((Ingredient)ingredient).getName())){
-                            lista.add($naz);
+                            lista.add($name);
                             break;
                         }
                     }

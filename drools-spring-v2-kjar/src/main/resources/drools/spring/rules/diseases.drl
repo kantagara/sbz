@@ -48,7 +48,8 @@ rule "Hronicna bubrezna bolest"
             result(count + (int)$hiper + (int)$dijabetes)
         )
     then
-        DiseaseFound diseaseFound = new DiseaseFound($diseaseService.findByName("hronicna bubrezna bolest"), 1, 1);
+        Disease disease = $diseaseService.findByName("hronicna bubrezna bolest");
+        DiseaseFound diseaseFound = new DiseaseFound(disease, $opste.intValue() + $dijabetes.intValue() + $hiper.intValue(), disease.getGeneralSymptoms().size() + disease.getSpecificSymptoms().size());
         insert(diseaseFound);
         System.out.println("hbb");
 end
@@ -63,9 +64,9 @@ rule "Akutna bubrezna povreda"
         $diseaseService: DiseaseService();
         $d: Diagnosis($symptoms: symptoms)
         Patient($dij: diagnoses)
-        $pritisak: Symptom(name == "temperatura")
+        $t: Symptom(name == "temperatura")
         $temp: Number((intValue) >= 0)from accumulate (
-            Diagnosis(($pritisak memberOf disease.generalSymptoms) && (new Date() < DateUtil.addDays(dateCreated, 14, 0, 0))
+            Diagnosis(($t memberOf disease.generalSymptoms) && (new Date() < DateUtil.addDays(dateCreated, 14, 0, 0))
             )from $dij,
             init(int count = 0;),
             action(count = 1;),
@@ -97,8 +98,9 @@ rule "Akutna bubrezna povreda"
             result(count+(int)$temp+(int)$oper+(int)$ant)
         )
     then
-        DiseaseFound diseaseFound = new DiseaseFound($diseaseService.findByName("akutna bubrezna povreda"), 1, 1);
-        insert(diseaseFound);
+        Disease disease = $diseaseService.findByName("akutna bubrezna povreda");
+        DiseaseFound diseaseFound = new DiseaseFound(disease, $temp.intValue() + $oper.intValue() + $ant.intValue()  + $k.intValue(), disease.getGeneralSymptoms().size() + disease.getSpecificSymptoms().size());
+               insert(diseaseFound);
         System.out.println("akp");
 end
 
@@ -194,9 +196,8 @@ rule "Sinusna infekcija"
         )
     then
         Disease disease = $diseaseService.findByName("sinusna infekcija");
-        DiseaseFound nadjenaBolest = new DiseaseFound(disease, (int)$k, disease.getGeneralSymptoms().size() );
-        insert(nadjenaBolest);
-        System.out.println("sinusi  " + $k);
+        DiseaseFound diseaseFound = new DiseaseFound(disease, (int)$k, disease.getGeneralSymptoms().size() );
+        insert(diseaseFound);
 end
 
 rule "Hipertenzija"
@@ -217,8 +218,8 @@ rule "Hipertenzija"
         )
     then
         Disease disease = $diseaseService.findByName("hipertenzija");
-        DiseaseFound nadjenaBolest = new DiseaseFound(disease, 1, 1);
-        insert(nadjenaBolest);
+        DiseaseFound diseaseFound = new DiseaseFound(disease, 1, 1);
+        insert(diseaseFound);
         System.out.println("hipertenzija");
 end
 

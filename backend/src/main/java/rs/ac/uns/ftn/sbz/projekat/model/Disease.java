@@ -59,4 +59,13 @@ public class Disease
     public void setName(String name) {
         this.name = name;
     }
+
+
+    @Override
+    public String toString() {
+        return "Disease{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
+    }
 }
